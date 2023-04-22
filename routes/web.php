@@ -28,7 +28,7 @@ Route::controller(UserAccountController::class)->group(function(){
     Route::post('/store', 'store')->name('register.store');
 });
 
-Route::controller(ExamManagementSystemController::class)->group(function(){
+Route::controller(AdminDashboardController::class)->group(function(){
     Route::get('/admin/panel', 'showAdminPanel')->name('admin.showAdminPanel');
 });
 
@@ -38,4 +38,10 @@ Route::controller(StrandsController::class)->group(function(){
     Route::get('/strand/ia', 'showIA')->name('strand.showIA');
     Route::get('/strand/smaw', 'showSMAW')->name('strand.showSMAW');
     
+});
+
+Route::controller(UserManagementController::class)->group(function(){
+    Route::get('/admin/panel/users-all', 'showAllUsers')->name('admin.showAllUsers');
+    Route::get('/admin/panel/user-add', 'showAddUser')->name('admin.addUser');
+    Route::get('/admin/panel/user-edit', 'showEditUser')->name('admin.editUser');
 });
