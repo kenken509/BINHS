@@ -10,11 +10,16 @@ import 'primevue/resources/themes/tailwind-light/theme.css'
 import "primevue/resources/primevue.min.css";
 import "primeicons/primeicons.css";
 import InputText from 'primevue/inputtext';
+import InputMask from 'primevue/inputmask';
 import Avatar from 'primevue/avatar';
 import Menu from 'primevue/menu';
 import Tooltip from 'primevue/tooltip';
 import Sidebar from 'primevue/sidebar'
 import Button from 'primevue/button';
+import Toast from 'primevue/toast';
+import ToastService from 'primevue/toastservice';
+import Dropdown from 'primevue/dropdown';
+import InputNumber from 'primevue/inputnumber';
 
 //flowbite
 // import { 
@@ -55,11 +60,16 @@ createInertiaApp({
       .use(tailElem)
       .use(initFlowbite)
       .use(PrimeVue, {ripple: true})
+      .use(ToastService)
       .component('InputText', InputText)
+      .component('InputNumber',InputNumber)
+      .component('Dropdown', Dropdown)
+      .component('Toast', Toast)
       .component('Avatar', Avatar)
       .component('Menu',Menu)
       .component('Sidebar', Sidebar)
       .component('Button', Button)
+      .component('InputMask',InputMask)
       .directive('tooltip', Tooltip)
       .mount(el)
   },

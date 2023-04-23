@@ -25,7 +25,15 @@ class UserManagementController extends Controller
 
 
 
+
     public function showEditUser(){
         return inertia('AdminDashboard/AdminPages/UserManagement/UserEdit');
+    }
+
+
+    public function userDelete(User $user){
+
+        $user->delete();
+        return redirect()->back()->with('success', 'Deleted Successfully');
     }
 }
