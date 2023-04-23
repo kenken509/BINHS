@@ -45,4 +45,5 @@ Route::controller(UserManagementController::class)->group(function(){
     Route::get('/admin/panel/user-add', 'showAddUser')->name('admin.addUser');
     Route::get('/admin/panel/user-edit', 'showEditUser')->name('admin.editUser');
     Route::delete('/admin/panel/user-delete/{user}', 'userDelete')->name('admin.userDelete');
+    Route::post('/admin/panel/user-store', 'userStore')->name('admin.userStore');
 });

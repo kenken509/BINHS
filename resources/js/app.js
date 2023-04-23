@@ -20,6 +20,7 @@ import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 import Dropdown from 'primevue/dropdown';
 import InputNumber from 'primevue/inputnumber';
+import Calendar from 'primevue/calendar';
 
 //flowbite
 // import { 
@@ -47,7 +48,6 @@ const tailElem = async () => {
 
 
 
-
 createInertiaApp({
   resolve: name => {
     const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
@@ -62,6 +62,7 @@ createInertiaApp({
       .use(PrimeVue, {ripple: true})
       .use(ToastService)
       .component('InputText', InputText)
+      .component('Calendar', Calendar)
       .component('InputNumber',InputNumber)
       .component('Dropdown', Dropdown)
       .component('Toast', Toast)

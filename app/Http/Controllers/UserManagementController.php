@@ -20,7 +20,9 @@ class UserManagementController extends Controller
         return inertia('AdminDashboard/AdminPages/UserManagement/UserAdd');
     }
 
-
+    public function userStore(Request $request){
+        dd($request);
+    }
 
 
 
