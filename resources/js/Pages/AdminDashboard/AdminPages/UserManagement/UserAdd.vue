@@ -78,7 +78,16 @@
                 <div v-if="isTeacher" class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
                     <Dropdown  v-model="selectedSubject" :options="subjectList" optionLabel="title" placeholder="Select a Subject" class="w-full md:w-14rem "  />
                 </div>
-                
+                <div class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-9 ">
+                    <div class="flex justify-around">
+                        <label for="myfile">Select a file:</label>
+                        <input  type="file" id="myfile" @input="form.image = $event.target.files[0]">
+                        <progress v-if="form.progress" :value="form.progress.percentage" max="100">
+                            {{ form.progress.percentage }}%
+                        </progress>
+                    </div>
+                    
+                </div>
             </div>
             
             <div class="w-full mt-6 ">
@@ -169,6 +178,7 @@ watch(selectedCity, (val) =>{
     barangays(val.city_code).then((barangays) => brgyList.value = barangays);
     disabledBarangay.value = false
 })
+const test = ref(null)
 
 const form = useForm({
     firstName: null,
@@ -177,11 +187,15 @@ const form = useForm({
     email: null,
     phoneNumber: null,
     birthDate: null,
+    image:null,
+    
     
 })
 
+
 const submit = ()=>form.post(route('admin.userStore'),{
     preserveScroll: true,
+    onSuccess: () => form.reset('images'), // if sucessfull reset image input
 })
 </script>
 

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\UserCollection;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Auth;
 
 class UserManagementController extends Controller
 {
@@ -20,8 +22,31 @@ class UserManagementController extends Controller
         return inertia('AdminDashboard/AdminPages/UserManagement/UserAdd');
     }
 
-    public function userStore(Request $request){
-        dd($request);
+    public function userStore(User $user,Request $request){
+
+        //dd($request->image);
+        
+         
+         
+        $file = $request->file('image');
+        $originalName = $file->getClientOriginalName();
+        $userEmail = Auth::user()->email;
+        $cleanedString = str_replace(".", "", $userEmail); //replace . to null 
+        $newName = $cleanedString.$originalName;
+        
+        //dd($newName);
+         
+         if($request->hasFile('image')){ //checks if there is a file uploaded
+            
+            $path = $request->file('image')->storeAs('images',$newName, 'public'); // file to images folder in public disk
+            
+            
+            
+
+            dd($path);
+
+            
+         }
     }
 
 
