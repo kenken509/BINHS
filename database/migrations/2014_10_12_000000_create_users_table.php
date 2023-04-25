@@ -13,11 +13,24 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('fName');
+            $table->string('mName');
+            $table->string('lName');
+            $table->enum('gender',['male','female']);
+            $table->enum('civilStatus',['single','married']);
+            $table->string('image')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->enum('role', ['admin','instructor','student','guest', ])->default('guest');
+            $table->string('phoneNumber');
+            $table->string('birthDate');
+            $table->string('password')->default('$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'); //password
+            //address columns
+            $table->String('region');
+            $table->String('province');
+            $table->String('city');
+            $table->String('barangay');
+            
+            $table->enum('role', ['admin','instructor','student' ]);
             $table->rememberToken();
             $table->timestamps();
         });

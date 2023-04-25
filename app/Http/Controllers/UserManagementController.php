@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\UserCollection;
 use Illuminate\Http\Request;
@@ -22,30 +23,45 @@ class UserManagementController extends Controller
         return inertia('AdminDashboard/AdminPages/UserManagement/UserAdd');
     }
 
-    public function userStore(User $user,Request $request){
+    public function userStore(Request $request){
 
-        //dd($request->image);
+        //authenticate to register new account
+        dd(fake()->dateTime());
+        dd($request);
+
+        $file = $request->file('image')[0];
+        $currentUser = Auth::user()->id;
+        $user2 = User::findOrFail($currentUser);
+        $default = 'images/default.png';
         
-         
-         
-        $file = $request->file('image');
-        $originalName = $file->getClientOriginalName();
-        $userEmail = Auth::user()->email;
-        $cleanedString = str_replace(".", "", $userEmail); //replace . to null 
-        $newName = $cleanedString.$originalName;
         
-        //dd($newName);
          
          if($request->hasFile('image')){ //checks if there is a file uploaded
+            //create new name
             
-            $path = $request->file('image')->storeAs('images',$newName, 'public'); // file to images folder in public disk
+            $originalName = $file->getClientOriginalName();
+            $userEmail = Auth::user()->email;
+            $cleanedString = str_replace(".", "", $userEmail); //replace . to null 
+            $newName = $cleanedString.$originalName;
             
+            $path = $file->storeAs('images',$newName, 'public'); // file to images folder in public disk
             
+            $user2->image = $path;
+            $user2->save();
             
 
-            dd($path);
+            
+
+            return redirect()->back()->with('success', 'Image uploaded');
+            
+         }else{
+        
 
             
+            $user2->image = $default;
+            $user2->save();
+
+            return redirect()->back()->with('success', 'Image uploaded');
          }
     }
 

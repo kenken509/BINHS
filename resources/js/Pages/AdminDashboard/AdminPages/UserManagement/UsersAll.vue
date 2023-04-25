@@ -1,5 +1,5 @@
 <template>
-    <DashboardLayout>
+    <DashboardLayout :user="user">
             <div class="flex flex-col ">
                 <div class="border-bot-only border-gray-600 shadow-md">
                     <span class="text-[20px] font-bold text-gray-500">All Users Page</span>
@@ -77,6 +77,6 @@ defineProps({
    users:Object,
 })
 
-
+const user = usePage().props.user;
 
 </script>

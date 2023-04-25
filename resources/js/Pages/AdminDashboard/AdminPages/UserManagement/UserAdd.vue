@@ -1,11 +1,12 @@
 <template>
-    <DashboardLayout>
+    <DashboardLayout :user="user">
         <div class="border-bot-only border-gray-600 shadow-md">
             <span class="text-[20px] font-bold text-gray-500">Add New User</span>  
         </div>
-
+        
         <form @submit.prevent="submit">
             <div class="grid grid-cols-12   gap-4 w-full mt-12 ">
+
                 <div class="col-span-12 mb-3 border-bot-only px-2">Personal Info</div>
                 <div class="w-full col-span-12 md:col-span-4 ">
                     <span class="p-float-label">
@@ -78,21 +79,24 @@
                 <div v-if="isTeacher" class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
                     <Dropdown  v-model="selectedSubject" :options="subjectList" optionLabel="title" placeholder="Select a Subject" class="w-full md:w-14rem "  />
                 </div>
-                <div class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-9 ">
-                    <div class="flex justify-around">
-                        <label for="myfile">Select a file:</label>
-                        <input  type="file" id="myfile" @input="form.image = $event.target.files[0]">
-                        <progress v-if="form.progress" :value="form.progress.percentage" max="100">
-                            {{ form.progress.percentage }}%
-                        </progress>
-                    </div>
+             
+
+                <div class="col-span-12 mb-3 border-bot-only px-2">Avatar</div>
+                <div class="col-span-12  px-6" >
+                    <img  :src="imageUrl  ? imageUrl: appUrl+defaultImage" alt="Uploaded Image" class="w-[100px] h-[100px] rounded-full">
+                </div>
+                <div class="flex flex-col col-span-12 px-4">
+                    <label for="myfile" class="mb-2 cursor-pointer">Profile Picture</label>
+                    <input  type="file" id="myfile" @input="onFileChange" class="mt-2">
                     
+                    <progress v-if="form.progress" :value="form.progress.percentage" max="100">
+                        {{ form.progress.percentage }}%
+                    </progress>
                 </div>
             </div>
             
             <div class="w-full mt-6 ">
                 <Button label="Submit" class="w-full" type="submit"/>
-                
             </div>
             
         </form>
@@ -101,10 +105,26 @@
 
 <script setup>
 import DashboardLayout from '../../Layout/DashboardLayout.vue';
-import {ref, onMounted, watch, computed} from 'vue'
+import {ref, onMounted, watch, computed, onBeforeUnmount, reactive} from 'vue'
 import {regions,provinces,cities,barangays,} from "select-philippines-address";
-import { useForm } from '@inertiajs/vue3'
+import { useForm, usePage } from '@inertiajs/vue3'
 
+const cleanup = ()=>{
+    URL.revokeObjectURL(imageUrl.value);
+}
+
+onBeforeUnmount(cleanup);
+
+const user = computed(() => usePage().props.user);
+
+const imageUrl = ref('');
+
+
+
+
+
+const appUrl = 'http://127.0.0.1:8000/storage/'
+const defaultImage = 'images/default.png'
 
 const disabledProvince = ref(true)
 const disabledCity = ref(true)
@@ -178,7 +198,7 @@ watch(selectedCity, (val) =>{
     barangays(val.city_code).then((barangays) => brgyList.value = barangays);
     disabledBarangay.value = false
 })
-const test = ref(null)
+
 
 const form = useForm({
     firstName: null,
@@ -187,13 +207,23 @@ const form = useForm({
     email: null,
     phoneNumber: null,
     birthDate: null,
-    image:null,
-    
-    
+    image:[],
 })
 
 
-const submit = ()=>form.post(route('admin.userStore'),{
+
+
+const onFileChange = (event) =>{
+    
+    const file = event.target.files[0];
+    imageUrl.value = URL.createObjectURL(file);
+    
+    form.image.push(event.target.files[0])
+    console.log(form.image.value)
+}
+
+
+const submit = ()=> form.post(route('admin.userStore'),{
     preserveScroll: true,
     onSuccess: () => form.reset('images'), // if sucessfull reset image input
 })

@@ -2,6 +2,7 @@
     <!--Nav header-->
     <nav class=" fixed top-0 z-50 w-full  bg-green-200 border-b border-green-800 dark:bg-[#034515] shadow-lg">
       <div class="px-3 py-3 lg:px-5 lg:pl-3">
+        
         <div class="flex items-center justify-between">
           <div class="flex items-center justify-start">
             <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
@@ -12,6 +13,7 @@
              </button>
             <a :href="route('index')" class="flex ml-2 md:mr-24">
               <img src="../../../../../public/images/webPage/logo1.png" class="h-14 mr-3" alt="Error" />
+    
               <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">BINHS</span>
             </a>
           </div>
@@ -20,7 +22,7 @@
                 <div>
                   <button type="button" class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                     <span class="sr-only">Open user menu</span>
-                    <img class="w-14 h-14 rounded-full" src="../../../../../public/images/webPage/aries1.jpg" alt="user photo">
+                    <img class="w-14 h-14 rounded-full" :src="user.image ? appUrl+user.image:appUrl+defaultImage" alt="user photo">
                   </button>
                 </div>
                 <div class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600" id="dropdown-user">
@@ -115,6 +117,11 @@
 import {Link} from '@inertiajs/vue3'
 
 
+const appUrl = 'http://127.0.0.1:8000/storage/'
+const defaultImage = 'images/default.png'
 
 
+defineProps({
+  user:Object,
+})
 </script>
