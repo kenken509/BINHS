@@ -5,7 +5,7 @@
 <script setup>
 
 defineProps({
-    error:Object
+    error:String
 })
 
 </script>

@@ -102,7 +102,7 @@
                     <InputError :error="form.errors.city"/>
                 </div>
                 <div class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3">
-                    <Dropdown  v-model="selectedBrgy" :options="brgyList" optionLabel="brgy_name" placeholder="Select a Barangay" class="w-full md:w-14rem " :disabled="disabledBarangay"/>
+                    <Dropdown  v-model="selectedBrgy" :options="brgyList" optionLabel="brgy_name" placeholder="Select a Barangay" class="w-full md:w-14rem " :disabled="disabledBarangay" />
                     <InputError :error="form.errors.barangay"/>
                 </div>
                 
@@ -110,10 +110,10 @@
                 <div class="w-full mb-4 col-span-12 border-bot-only px-2 ">Role</div>
                 <div class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
                     <Dropdown  v-model="selectedRole" :options="roleList" optionLabel="role" placeholder="Select a Role" class="w-full md:w-14rem " />
-                    <InputError :error="form.errors.barangay"/>
+                    <InputError :error="form.errors.role"/>
                 </div>
                 <div v-if="isTeacher" class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
-                    <Dropdown  v-model="selectedSubject" :options="subjectList" optionLabel="title" placeholder="Select a Subject" class="w-full md:w-14rem "  />
+                    <Dropdown  v-model="selectedSubject" :options="subjectList" optionLabel="title" placeholder="Select a Subject" class="w-full md:w-14rem " />
                     <InputError :error="form.errors.subject"/>
                 </div>
              
@@ -129,9 +129,13 @@
                     <progress v-if="form.progress" :value="form.progress.percentage" max="100">
                         {{ form.progress.percentage }}%
                     </progress>
+                    <InputError :error="form.errors.image" />
+
+                    
                 </div>
             </div>
-            <!-- {{ form.firstName.errors }}  --> 
+            
+            
             <div class="w-full mt-6 ">
                 <Button label="Submit" class="w-full" type="submit"/>
             </div>
@@ -147,6 +151,8 @@ import {regions,provinces,cities,barangays,} from "select-philippines-address";
 import { useForm, usePage } from '@inertiajs/vue3'
 import InputError from '../../../GlobalComponent/InputError.vue';
 
+
+
 const cleanup = ()=>{
     URL.revokeObjectURL(imageUrl.value);
 }
@@ -157,7 +163,9 @@ const user = computed(() => usePage().props.user);
 
 const imageUrl = ref('');
 
-
+const handleSubjectChange = ()=>{
+    console.log('selected subject: '+selectedSubject);
+}
 
 
 
@@ -208,7 +216,7 @@ const selectedSubject = ref({})
 const selectedGender = ref('')
 const selectedCivilStatus = ref('')
 const isTeacher = ref(false)
-console.log(selectedRole.value)
+
 
 watch([selectedGender, selectedCivilStatus], ([newSelectedGender, newSelectedCivilStatus])=>{
     //console.log(newSelectedCivilStatus+ " *** " + newSelectedGender)

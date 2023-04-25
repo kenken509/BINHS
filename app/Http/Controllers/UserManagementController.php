@@ -27,21 +27,22 @@ class UserManagementController extends Controller
 
         //authenticate to register new account
         //dd($request);
-        $user = User::make($request->validate([
+        $user = User::make($request->validate([ //  "make" function creates a new instance of the model but not stored yet
             'firstName'     => 'required',
             'middleName'    => 'required',
             'lastName'      => 'required',
             'gender'        => 'required',
             'civilStatus'   => 'required',
-            'email'         => 'required|email|unique:users',
+            'email'         => 'required|email|unique:users', //unique:user means email field should be unique in the users table
             'phoneNumber'   => 'required|min:11|max:11',
-            'birthDate'     =>  'required|date|before:'.now()->subYears(18)->toDateString(),
-            'region'        =>  'required',
+            'birthDate'     => 'required|date|before:'.now()->subYears(18)->toDateString(),
+            'image'         => 'mimes:jpg,png,jpeg|max:10',
+            'region'        => 'required',
             'province'      => 'required',
             'city'          => 'required',
             'barangay'      => 'required',
             'role'          => 'required',
-            'subject'       =>  'required',
+            'subject'       => 'required',
 
         ],[
             'birthDate.before'          =>'Must be at least 17 years old',
@@ -53,7 +54,7 @@ class UserManagementController extends Controller
             'barangay.required'         => 'Baranggay is required',
             'role'                      => 'Role is required',
             'subject'                   => 'Subject is required',
-
+            'image'                     => 'Image file type must be in jpg,png,jpeg format. Maximum size: 3mb'
         ]));
 
 
