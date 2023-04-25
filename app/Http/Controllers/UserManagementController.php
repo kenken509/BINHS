@@ -26,43 +26,80 @@ class UserManagementController extends Controller
     public function userStore(Request $request){
 
         //authenticate to register new account
-        dd(fake()->dateTime());
-        dd($request);
+        //dd($request);
+        $user = User::make($request->validate([
+            'firstName'     => 'required',
+            'middleName'    => 'required',
+            'lastName'      => 'required',
+            'gender'        => 'required',
+            'civilStatus'   => 'required',
+            'email'         => 'required|email|unique:users',
+            'phoneNumber'   => 'required|min:11|max:11',
+            'birthDate'     =>  'required|date|before:'.now()->subYears(18)->toDateString(),
+            'region'        =>  'required',
+            'province'      => 'required',
+            'city'          => 'required',
+            'barangay'      => 'required',
+            'role'          => 'required',
+            'subject'       =>  'required',
 
-        $file = $request->file('image')[0];
-        $currentUser = Auth::user()->id;
-        $user2 = User::findOrFail($currentUser);
-        $default = 'images/default.png';
+        ],[
+            'birthDate.before'          =>'Must be at least 17 years old',
+            'gender.required'           => 'Gender is required',
+            'civilStatus.required'      => 'Status is required',
+            'region.required'           => 'Region is required',
+            'province.required'         => 'Province is required',
+            'city.required'             => 'City is required',
+            'barangay.required'         => 'Baranggay is required',
+            'role'                      => 'Role is required',
+            'subject'                   => 'Subject is required',
+
+        ]));
+
+
+
+
+
+
+
+
+
+
+
+        // $file = $request->file('image')[0];
+        // $currentUser = Auth::user()->id;
+        // $user2 = User::findOrFail($currentUser);
+        // $defaultImage = 'images/default.png';
         
         
          
-         if($request->hasFile('image')){ //checks if there is a file uploaded
+         //if($request->hasFile('image')){ //checks if there is a file uploaded
             //create new name
+           // dd('image exist');
+            // $originalName = $file->getClientOriginalName();
+            // $userEmail = Auth::user()->email;
+            //$cleanedString = str_replace(".", "", $userEmail); //replace . to null 
+            //$newName = $cleanedString.$originalName;
             
-            $originalName = $file->getClientOriginalName();
-            $userEmail = Auth::user()->email;
-            $cleanedString = str_replace(".", "", $userEmail); //replace . to null 
-            $newName = $cleanedString.$originalName;
+            //$path = $file->storeAs('images',$newName, 'public'); // file to images folder in public disk
             
-            $path = $file->storeAs('images',$newName, 'public'); // file to images folder in public disk
-            
-            $user2->image = $path;
-            $user2->save();
-            
-
+            //$user2->image = $path;
+            //$user2->save();
             
 
-            return redirect()->back()->with('success', 'Image uploaded');
             
-         }else{
+
+            //return redirect()->back()->with('success', 'Image uploaded');
+            
+        // }else{
         
 
             
-            $user2->image = $default;
-            $user2->save();
+        //     $user2->image = $defaultImage;
+        //     $user2->save();
 
-            return redirect()->back()->with('success', 'Image uploaded');
-         }
+        //     return redirect()->back()->with('success', 'Image uploaded');
+        //  }
     }
 
 
