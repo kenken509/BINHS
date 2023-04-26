@@ -88,12 +88,16 @@
                 <!--Complete Address-->
                 <div class="w-full mb-4 col-span-12 border-bot-only px-2 ">Address</div>
                 <div class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
-                    <Dropdown  v-model="selectedRegion" :options="regionList" optionLabel="region_name" placeholder="Select a Region" class="w-full md:w-14rem" />
+                    <Dropdown  v-model="selectedRegion" :options="regionList" optionLabel="region_name" placeholder="Select a Region" class="w-full md:w-14rem"  />
+                    <select>
+                        <option value="">select a region</option>
+                        <option v-for="region in regionList" :key="region.id" selected="{{ }}">{{ region }}</option>
+                    </select>
                     <InputError :error="form.errors.region"/>
                 </div>
 
                 <div class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
-                    <Dropdown  v-model="selectedProvince" :options="provinceList" optionLabel="province_name" placeholder="Select a Province" class="w-full md:w-14rem" :disabled="disabledProvince"/>
+                    <Dropdown  v-model="selectedProvince" :options="provinceList" optionLabel="province_name" placeholder="Select a Province" class="w-full md:w-14rem" :disabled="disabledProvince" />
                     <InputError :error="form.errors.province"/>
                 </div>
 
@@ -148,7 +152,7 @@
 <script setup>
 import DashboardLayout from '../../Layout/DashboardLayout.vue';
 import {ref, onMounted, watch, computed, onBeforeUnmount, reactive, defineProps} from 'vue'
-import {regions,provinces,cities,barangays,} from "select-philippines-address";
+import {regions,provinces,cities,barangays,provinceByName,regionByCode} from "select-philippines-address";
 import { useForm, usePage } from '@inertiajs/vue3'
 import InputError from '../../../GlobalComponent/InputError.vue';
 
@@ -182,7 +186,7 @@ const disabledProvince = ref(true)
 const disabledCity = ref(true)
 const disabledBarangay= ref(true)
 //data lists
-const regionList = ref([])
+const regionList = ref()
 const provinceList = ref([])
 const citiesList = ref([])
 const brgyList = ref([]) 
@@ -207,13 +211,39 @@ const subjectList = ref([
         'title': 'smaw'
     }
 ])
+var preSelectRegion = {
+    id:"",
+    psgc_code: "",
+    region_code:"",
+    region_name:"",
+}
+const test = ref({})
+// regions().then((region)=> regionList.value = region)
 
+regions().then((region)=> {
+    //const data = region
+    for(let i=0;i<region.length;i++){
+        console.log(region[i].region_name)
+    }
+    // for(let i = 0; i <region.length;i++){
+    //     console.log(region.id)
+    // }
+})
+regionByCode(user.user.region).then((region) => {
+    preSelectRegion.id = region.id,
+    preSelectRegion.psgc_code = region.psgc_code,
+    preSelectRegion.region_code = region.region_code,
+    preSelectRegion.region_name = region.region_name
 
-regions().then((region)=> regionList.value = region)
+});
+//console.log(preSelectRegion)
+
 
 
 //selected values
+
 const selectedRegion = ref({})
+
 const selectedProvince = ref({})
 const selectedCity = ref({})
 const selectedBrgy = ref({})
@@ -224,6 +254,8 @@ const selectedCivilStatus = ref(user.user.civilStatus)
 const isTeacher = ref(false)
 
 
+
+//provinceByName(user.user.province).then((province) => console.log(province));
 watch([selectedGender, selectedCivilStatus], ([newSelectedGender, newSelectedCivilStatus])=>{
     //console.log(newSelectedCivilStatus+ " *** " + newSelectedGender)
     form.civilStatus = newSelectedCivilStatus
@@ -282,9 +314,9 @@ const form = useForm({
     gender: null,
     civilStatus: null,
     email: null,
-    phoneNumber: null,
-    birthDate: null,
-    image:[],
+    phoneNumber: parseInt(user.user.phoneNumber),
+    birthDate: user.user.birthDate,
+    image:user.user.image,
     region: null,
     province: null,
     city: null,
