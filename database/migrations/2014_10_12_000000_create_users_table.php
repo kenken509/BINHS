@@ -29,7 +29,7 @@ return new class extends Migration
             $table->String('province');
             $table->String('city');
             $table->String('barangay');
-            
+            $table->enum('subject',['home economics','ict','industrial arts', 'smaw']);
             $table->enum('role', ['admin','instructor','student' ]);
             $table->rememberToken();
             $table->timestamps();

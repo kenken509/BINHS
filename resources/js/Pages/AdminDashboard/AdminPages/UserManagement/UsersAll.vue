@@ -35,7 +35,7 @@
                                             <div v-if="$page.props.flash.success"><Toast position="top-left" /> </div>
                                             
                                         
-                                            <Link href="#" class="cursor-pointer hover:dark:scale-125" v-tooltip.left="'Edit User'" ><span class="pi pi-user-edit text-green-600 scale-110 hover:dark:scale-150" @click.prevent="showSuccess"></span></Link>
+                                            <Link :href="route('admin.editUser', {id:user.id} )" class="cursor-pointer hover:dark:scale-125" v-tooltip.left="'Edit User'" ><span class="pi pi-user-edit text-green-600 scale-110 hover:dark:scale-150"></span></Link>
                                             <Link :href="route('admin.userDelete', {user: user.id})" class="cursor-pointer" v-tooltip.right="'Delete User'" as="button" method="delete" ><span class="pi pi-trash text-red-700 scale-110 hover:dark:scale-150"></span></Link>
                                         </div>
                                         
@@ -69,9 +69,9 @@ import { useToast } from 'primevue/usetoast';
 
 
 
-const showSuccess = (content) => {
-    toast.add({ severity: 'success',summary: 'Successfully Deleted', detail: content,  life: 3000});
-};
+// const showSuccess = (content) => {
+//     toast.add({ severity: 'success',summary: 'Successfully Deleted', detail: content,  life: 3000});
+// };
 
 defineProps({
    users:Object,

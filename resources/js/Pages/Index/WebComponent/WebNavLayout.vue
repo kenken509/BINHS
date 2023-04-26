@@ -178,7 +178,7 @@
                         data-te-nav-link-ref
                         >Sign In</a
                     > 
-                    
+                  
                         
                     <!--bell icon-->
                     

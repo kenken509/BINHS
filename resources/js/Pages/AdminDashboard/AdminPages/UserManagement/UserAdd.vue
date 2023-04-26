@@ -10,25 +10,25 @@
                 <div class="col-span-12 mb-3 border-bot-only px-2">Personal Info</div>
                 <div class="w-full col-span-12 md:col-span-4 ">
                     <span class="p-float-label">
-                        <InputText id="firstName" v-model="form.firstName" class="w-full"/>
+                        <InputText id="firstName" v-model="form.fName" class="w-full"/>
                         <label for="firstName">First name</label>
                     </span>
-                    <InputError :error="form.errors.firstName"/>
+                    <InputError :error="form.errors.fName"/>
                 </div>
                 <div class="w-full mb-4 col-span-12 md:col-span-4 ">
                     <span class="p-float-label">
-                        <InputText id="middleName" v-model="form.middleName" class="w-full" />
+                        <InputText id="middleName" v-model="form.mName" class="w-full" />
                         <label for="middleName">Middle name</label>
                     </span>
-                    <InputError :error="form.errors.middleName"/>
+                    <InputError :error="form.errors.mName"/>
                 </div>
                 
                 <div class="w-full mb-4 col-span-12 md:col-span-4 ">
                     <span class="p-float-label">
-                        <InputText id="lastName" v-model="form.lastName" class="w-full"/>
+                        <InputText id="lastName" v-model="form.lName" class="w-full"/>
                         <label for="lastName">Last name</label>
                     </span>
-                    <InputError :error="form.errors.lastName"/>
+                    <InputError :error="form.errors.lName"/>
                 </div>
                 
                 
@@ -129,8 +129,9 @@
                     <progress v-if="form.progress" :value="form.progress.percentage" max="100">
                         {{ form.progress.percentage }}%
                     </progress>
-                    <InputError :error="form.errors.image" />
-
+                    <div v-if="imageErrors.includes('this image')"><InputError :error="'Image file type must be in jpg,png format. Maximum size: 3mb'" /></div>
+                    
+                    
                     
                 </div>
             </div>
@@ -169,6 +170,8 @@ const handleSubjectChange = ()=>{
 
 
 
+
+
 const appUrl = 'http://127.0.0.1:8000/storage/'
 const defaultImage = 'images/default.png'
 
@@ -182,23 +185,23 @@ const citiesList = ref([])
 const brgyList = ref([]) 
 const roleList = ref([
     {
-        'role':'Admin'
+        'role':'admin'
     },{
-        'role':'Instructor'
+        'role':'instructor'
     }
 ])
 const subjectList = ref([
     {
-        'title': 'Home Economics'
+        'title': 'home Economics'
     },
     {
-        'title': 'ICT'
+        'title': 'ict'
     },
     {
-        'title': 'Industrial Arts'
+        'title': 'industrial arts'
     },
     {
-        'title': 'SMAW'
+        'title': 'smaw'
     }
 ])
 
@@ -231,7 +234,7 @@ watch(selectedSubject,(val) =>{
 
 watch(selectedRole, (val) =>{ 
      //console.log(val.role)
-    if(val.role === 'Instructor'){
+    if(val.role === 'instructor'){
         isTeacher.value = true
         form.role = val.role
     }else{
@@ -270,9 +273,9 @@ watch(selectedBrgy, (val) =>{
 })
 
 const form = useForm({
-    firstName: null,
-    middleName: null,
-    lastName: null,
+    fName: null,
+    mName: null,
+    lName: null,
     gender: selectedGender.value,
     civilStatus: null,
     email: null,
@@ -285,10 +288,10 @@ const form = useForm({
     barangay: null,
     role: null,
     subject: null,
+    password: null,
 })
 
-
-
+const imageErrors = computed(()=> Object.values(form.errors))
 
 const onFileChange = (event) =>{
     
@@ -296,7 +299,7 @@ const onFileChange = (event) =>{
     imageUrl.value = URL.createObjectURL(file);
     
     form.image.push(event.target.files[0])
-    console.log(form.image.value)
+    
 }
 
 

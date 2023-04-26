@@ -33,6 +33,7 @@ class UserFactory extends Factory
             'province' => 'cavite',
             'city'  => fake()->city(),
             'barangay' => fake()->streetName(),
+            'subject' => 'home economics',
             'remember_token' => Str::random(10),
         ];
     }
@@ -62,6 +63,7 @@ class UserFactory extends Factory
             // $table->String('province');
             // $table->String('city');
             // $table->String('barangay');
+
             
             // $table->enum('role', ['admin','instructor','student' ]);
             // $table->rememberToken();
