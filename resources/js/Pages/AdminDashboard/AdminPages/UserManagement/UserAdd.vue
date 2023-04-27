@@ -6,6 +6,16 @@
         
         <form @submit.prevent="submit">
             <div class="grid grid-cols-12   gap-4 w-full mt-12 ">
+                <!--role-->
+                <div class="w-full mb-4 col-span-12 border-bot-only px-2 ">Role</div>
+                <div class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
+                    <Dropdown  v-model="selectedRole" :options="roleList" optionLabel="role" placeholder="Select a Role" class="w-full md:w-14rem " />
+                    <InputError :error="form.errors.role"/>
+                </div>
+                <div v-if="isTeacher" class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
+                    <Dropdown  v-model="selectedSubject" :options="subjectList" optionLabel="title" placeholder="Select a Subject" class="w-full md:w-14rem " />
+                    <InputError :error="form.errors.subject"/>
+                </div>
 
                 <div class="col-span-12 mb-3 border-bot-only px-2">Personal Info</div>
                 <div class="w-full col-span-12 md:col-span-4 ">
@@ -54,6 +64,23 @@
                         <label for="birthDate">Birthday</label>                       
                     </span>
                     <InputError :error="form.errors.birthDate"/>
+                </div>
+
+                <!-- parents name -->
+                <div  v-if="isStudent" class="w-full mb-4 col-span-12 md:col-span-6 ">
+                    <span v-if="isStudent" class="p-float-label">
+                        <InputText id="fatherName" v-model="form.mName" class="w-full" />
+                        <label for="fatherName">Father's name</label>
+                    </span>
+                    <InputError :error="form.errors.mName"/>
+                </div>
+
+                <div v-if="isStudent" class="w-full mb-4 col-span-12 md:col-span-6 " >
+                    <span class="p-float-label">
+                        <InputText id="motherName" v-model="form.mName" class="w-full" />
+                        <label for="motherName">Mother's name</label>
+                    </span>
+                    <InputError :error="form.errors.mName"/>
                 </div>
 
                 <div class="w-full mb-4 col-span-12 md:col-span-4 space-y-2 mx-4" >
@@ -106,16 +133,7 @@
                     <InputError :error="form.errors.barangay"/>
                 </div>
                 
-                <!--role-->
-                <div class="w-full mb-4 col-span-12 border-bot-only px-2 ">Role</div>
-                <div class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
-                    <Dropdown  v-model="selectedRole" :options="roleList" optionLabel="role" placeholder="Select a Role" class="w-full md:w-14rem " />
-                    <InputError :error="form.errors.role"/>
-                </div>
-                <div v-if="isTeacher" class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
-                    <Dropdown  v-model="selectedSubject" :options="subjectList" optionLabel="title" placeholder="Select a Subject" class="w-full md:w-14rem " />
-                    <InputError :error="form.errors.subject"/>
-                </div>
+                
              
 
                 <div class="col-span-12 mb-3 border-bot-only px-2">Avatar</div>
@@ -186,8 +204,12 @@ const brgyList = ref([])
 const roleList = ref([
     {
         'role':'admin'
-    },{
+    },
+    {
         'role':'instructor'
+    },
+    {
+        'role': 'student'
     }
 ])
 const subjectList = ref([
@@ -219,9 +241,10 @@ const selectedSubject = ref({})
 const selectedGender = ref('')
 const selectedCivilStatus = ref('')
 const isTeacher = ref(false)
+const isStudent = ref(false)
 
 
-watch([selectedGender, selectedCivilStatus], ([newSelectedGender, newSelectedCivilStatus])=>{
+watch([selectedGender, selectedCivilStatus, isStudent], ([newSelectedGender, newSelectedCivilStatus])=>{
     //console.log(newSelectedCivilStatus+ " *** " + newSelectedGender)
     form.civilStatus = newSelectedCivilStatus
     form.gender = newSelectedGender
@@ -239,6 +262,14 @@ watch(selectedRole, (val) =>{
         form.role = val.role
     }else{
         isTeacher.value = false
+        form.role = val.role
+    }
+
+    if(val.role === 'student'){
+        isStudent.value = true
+        form.role = val.role
+    }else{
+        isStudent.value = false
         form.role = val.role
     }
     
@@ -289,6 +320,8 @@ const form = useForm({
     role: null,
     subject: null,
     password: null,
+    fatherName:null,
+    motherName:null,
 })
 
 const imageErrors = computed(()=> Object.values(form.errors))

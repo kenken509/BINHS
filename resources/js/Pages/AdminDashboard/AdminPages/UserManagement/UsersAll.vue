@@ -13,7 +13,8 @@
                             <thead class="border-b font-medium dark:border-neutral-500 bg-gray-300">
                                 <tr>
                                 <th scope="col" class="px-6 py-4">ID #</th>
-                                <th scope="col" class="px-6 py-4">User Name</th>
+                                <th scope="col" class="px-6 py-4">Picture</th>
+                                <th scope="col" class="px-6 py-4">Full name</th>
                                 <th scope="col" class="px-6 py-4">Email</th>
                                 <th scope="col" class="px-6 py-4">Role</th>
                                 <th scope="col" class="px-6 py-4">Action</th>
@@ -27,7 +28,14 @@
                                 class="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-gray-300">
                                     
                                     <td class="whitespace-nowrap px-6 py-4 font-medium">{{ user.id}}</td>
-                                    <td class="whitespace-nowrap px-6 py-4">{{ user.name }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4">
+                                        <Image :src="user.image ? appUrl+user.image:appUrl+defaultImage" alt="Image" width="60" preview>
+                                            <template #indicator>
+                                                <i class="pi pi-eye"></i>
+                                            </template>
+                                        </Image>     
+                                    </td>   
+                                    <td class="whitespace-nowrap px-6 py-4">{{ toUpperFirst(user.lName)  }}, {{ toUpperFirst(user.fName) }} {{ user.mName.substring(0,1).toUpperCase() }}.</td>
                                     <td class="whitespace-nowrap px-6 py-4">{{ user.email }}</td>
                                     <td class="whitespace-nowrap px-6 py-4">{{ user.role }}</td>
                                     <td class="whitespace-nowrap px-6 py-4">
@@ -35,8 +43,10 @@
                                             <div v-if="$page.props.flash.success"><Toast position="top-left" /> </div>
                                             
                                         
-                                            <Link :href="route('admin.editUser', {id:user.id} )" class="cursor-pointer hover:dark:scale-125" v-tooltip.left="'Edit User'" ><span class="pi pi-user-edit text-green-600 scale-110 hover:dark:scale-150"></span></Link>
-                                            <Link :href="route('admin.userDelete', {user: user.id})" class="cursor-pointer" v-tooltip.right="'Delete User'" as="button" method="delete" ><span class="pi pi-trash text-red-700 scale-110 hover:dark:scale-150"></span></Link>
+                                            
+                                            <Link :href="route('admin.userDelete', {user: user.id})" class="cursor-pointer" v-tooltip.left="'Delete User'" as="button" method="delete" ><span class="pi pi-trash text-red-700 scale-110 hover:dark:scale-150"></span></Link>
+                                            <Link :href="route('admin.editUser', {id:user.id} )" class="cursor-pointer hover:dark:scale-125" v-tooltip.right="'Edit User'" ><span class="pi pi-user-edit text-green-600 scale-110 hover:dark:scale-150"></span></Link>
+                                            <Link href="#" class="cursor-pointer" v-tooltip.right="'View full info'" ><span class="pi pi-eye text-green-600 scale-110 hover:dark:scale-150"></span></Link>
                                         </div>
                                         
                                     </td>
@@ -78,5 +88,14 @@ defineProps({
 })
 
 const user = usePage().props.user;
+const toUpperFirst = (str)=>{
+    let firstLetter = str.charAt(0);
+    let capFirstLetter = firstLetter.toUpperCase();
+    let restOfString = str.slice(1);
+    let result = capFirstLetter + restOfString;
 
+    return result;
+}
+const appUrl = 'http://127.0.0.1:8000/storage/'
+const defaultImage = 'images/default.png'
 </script>
