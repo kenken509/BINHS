@@ -5,8 +5,9 @@
         </div>
         
         <form @submit.prevent="submit">
+            sdfsdfdf
             <div class="grid grid-cols-12   gap-4 w-full mt-12 ">
-
+                
                 <div class="col-span-12 mb-3 border-bot-only px-2">Personal Info</div>
                 <div class="w-full col-span-12 md:col-span-4 ">
                     <span class="p-float-label">
@@ -89,10 +90,6 @@
                 <div class="w-full mb-4 col-span-12 border-bot-only px-2 ">Address</div>
                 <div class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
                     <Dropdown  v-model="selectedRegion" :options="regionList" optionLabel="region_name" placeholder="Select a Region" class="w-full md:w-14rem"  />
-                    <select>
-                        <option value="">select a region</option>
-                        <option v-for="region in regionList" :key="region.id" selected="{{ }}">{{ region }}</option>
-                    </select>
                     <InputError :error="form.errors.region"/>
                 </div>
 
@@ -135,7 +132,7 @@
                     </progress>
                     <div v-if="imageErrors.includes('this image')"><InputError :error="'Image file type must be in jpg,png format. Maximum size: 3mb'" /></div>
                     
-                    {{ user.user.region }}
+                    
                     
                 </div>
             </div>
@@ -152,7 +149,7 @@
 <script setup>
 import DashboardLayout from '../../Layout/DashboardLayout.vue';
 import {ref, onMounted, watch, computed, onBeforeUnmount, reactive, defineProps} from 'vue'
-import {regions,provinces,cities,barangays,provinceByName,regionByCode} from "select-philippines-address";
+import {regions,provinces,cities,barangays,provinceByName,regionByCode, provincesByCode} from "select-philippines-address";
 import { useForm, usePage } from '@inertiajs/vue3'
 import InputError from '../../../GlobalComponent/InputError.vue';
 
@@ -175,7 +172,33 @@ const handleSubjectChange = ()=>{
     console.log('selected subject: '+selectedSubject);
 }
 
-
+// show selected
+onMounted(()=>{
+    regionByCode(user.user.region).then((region) => {
+        selectedRegion.value = region
+        
+        provincesByCode(selectedRegion.value.region_code).then((province) => {
+            const tempProvince = province.filter((prov)=> prov.province_code === user.user.province)
+            selectedProvince.value = tempProvince[0];
+            //console.log(selectedProvince.value)
+            cities(selectedProvince.value.province_code).then((city) => {
+                const tempCity = city.filter((town)=> town.city_code === user.user.city)
+                selectedCity.value = tempCity[0];
+                //console.log(selectedCity.value)
+                barangays(selectedCity.value.city_code).then((barangays) => {
+                    const tempBarangay = barangays.filter((barangay) => barangay.brgy_code === user.user.barangay)
+                    selectedBrgy.value = tempBarangay[0]
+                    //console.log(selectedBrgy.value)
+                });
+            });
+        });
+    });
+    // regions().then((region) => console.log(region));
+    // provinces("04").then((province) => console.log(province));
+    //cities("0421").then((city) => console.log(city));
+    //barangays("042118").then((barangays) => console.log(barangays));
+    //console.log('this is the province: '+user.user.province)
+})
 
 
 
@@ -211,31 +234,24 @@ const subjectList = ref([
         'title': 'smaw'
     }
 ])
-var preSelectRegion = {
-    id:"",
-    psgc_code: "",
-    region_code:"",
-    region_name:"",
-}
-const test = ref({})
-// regions().then((region)=> regionList.value = region)
 
-regions().then((region)=> {
-    //const data = region
+
+const regionSelection = ref([]);
+const test = ref([])
+regions().then((region)=> regionList.value = region)
+
+regions().then((region)=> {    
+    //console.log(region.length)
     for(let i=0;i<region.length;i++){
-        console.log(region[i].region_name)
+       regionSelection.value.push(region[i].region_name)
     }
+    
+    
     // for(let i = 0; i <region.length;i++){
     //     console.log(region.id)
     // }
 })
-regionByCode(user.user.region).then((region) => {
-    preSelectRegion.id = region.id,
-    preSelectRegion.psgc_code = region.psgc_code,
-    preSelectRegion.region_code = region.region_code,
-    preSelectRegion.region_name = region.region_name
 
-});
 //console.log(preSelectRegion)
 
 

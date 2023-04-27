@@ -20,14 +20,18 @@ class UserManagementController extends Controller
     }
 
     public function showAddUser(){
-        return inertia('AdminDashboard/AdminPages/UserManagement/UserEdit');
+        return inertia('AdminDashboard/AdminPages/UserManagement/UserAdd');
     }
 
     public function userStore(Request $request){
 
         //authenticate to register new account
         
-        //dd($request);
+        $date = date_create($request->date);
+        $formattedDate = date_format($date,'m/d/Y');
+        $request->date = $formattedDate;
+        
+        
         $defaultPassword = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
         $request->password = $defaultPassword;
         
@@ -80,6 +84,7 @@ class UserManagementController extends Controller
                     'subject'                   => 'Subject is required',
                     
                 ]));
+                $user->birthDate = $formattedDate;
                 $user->image = $storeName;
                 $user->save();
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
@@ -119,6 +124,7 @@ class UserManagementController extends Controller
                     'role'                      => 'Role is required',
                     
                 ]));
+                $user->birthDate = $formattedDate;
                 $user->image = $storeName;
                 $user->save();
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
@@ -160,8 +166,8 @@ class UserManagementController extends Controller
                     'role'                      => 'Role is required',
                     'subject'                   => 'Subject is required',
                 ]));
-            
-            $user->save();
+                $user->birthDate = $formattedDate;
+                $user->save();
             return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }else{ //if not instructor
                 $user = User::make($request->validate([ //  "make" function creates a new instance of the model but not stored yet
@@ -190,9 +196,9 @@ class UserManagementController extends Controller
                     'role'                      => 'Role is required',
                     
                 ]));
-            
-            $user->save();
-            return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
+                $user->birthDate = $formattedDate;
+                $user->save();
+                return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
         }
        

@@ -24,16 +24,17 @@ class UserFactory extends Factory
             'gender' => 'male',
             'civilStatus' => 'single',
             'phoneNumber' => fake()->phoneNumber(),
-            'birthDate' => fake()->dateTime(),
+            'birthDate' => fake()->date('m/d/Y'),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'image' => null,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'region' => 'Region 4',
-            'province' => 'cavite',
-            'city'  => fake()->city(),
-            'barangay' => fake()->streetName(),
-            'subject' => 'home economics',
+            'region' => '04',
+            'province' => '0421',
+            'city'  => '042118',
+            'barangay' => '042118047',
+            'subject' => null,
+            'role' =>'admin',
             'remember_token' => Str::random(10),
         ];
     }

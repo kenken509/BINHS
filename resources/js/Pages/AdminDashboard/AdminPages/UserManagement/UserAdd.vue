@@ -50,7 +50,7 @@
 
                 <div class="w-full mb-4 col-span-12 md:col-span-4 " >
                     <span class="p-float-label">
-                        <Calendar v-model="form.birthDate" id="birthDate" class="w-full" />
+                        <Calendar v-model="form.birthDate" id="birthDate" class="w-full"  />
                         <label for="birthDate">Birthday</label>                       
                     </span>
                     <InputError :error="form.errors.birthDate"/>
