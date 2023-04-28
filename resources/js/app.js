@@ -24,6 +24,7 @@ import Calendar from 'primevue/calendar';
 import RadioButton from 'primevue/radiobutton';
 import InlineMessage from 'primevue/inlinemessage';
 import Image from 'primevue/image';
+import Dialog from 'primevue/dialog';
 
 //flowbite
 // import { 
@@ -64,6 +65,7 @@ createInertiaApp({
       .use(initFlowbite)
       .use(PrimeVue, {ripple: true})
       .use(ToastService)
+      .component('Dialog',Dialog)
       .component('Image', Image)
       .component('InlineMessage',InlineMessage)
       .component('RadioButton', RadioButton)

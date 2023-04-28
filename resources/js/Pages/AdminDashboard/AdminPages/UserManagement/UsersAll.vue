@@ -46,7 +46,7 @@
                                             
                                             <Link :href="route('admin.userDelete', {user: user.id})" class="cursor-pointer" v-tooltip.left="'Delete User'" as="button" method="delete" ><span class="pi pi-trash text-red-700 scale-110 hover:dark:scale-150"></span></Link>
                                             <Link :href="route('admin.editUser', {id:user.id} )" class="cursor-pointer hover:dark:scale-125" v-tooltip.right="'Edit User'" ><span class="pi pi-user-edit text-green-600 scale-110 hover:dark:scale-150"></span></Link>
-                                            <Link href="#" class="cursor-pointer" v-tooltip.right="'View full info'" ><span class="pi pi-eye text-green-600 scale-110 hover:dark:scale-150"></span></Link>
+                                            <span class="pi pi-eye text-green-600 scale-110 hover:dark:scale-150 cursor-pointer" v-tooltip.right="'View full info'" @click="openModal(user.id)" ></span>
                                         </div>
                                         
                                     </td>
@@ -61,6 +61,28 @@
                     <Pagination :links="users.links"/>
                         
                 </div>
+                <!--Modal-->
+                <div class="card flex justify-content-center userInfo">
+                    
+                    <Dialog v-model:visible="visible" modal   :userId="userId" :style="{ width: '50vw' } ">
+                        <div v-for="user in users.data" :key="user.id">
+                            <div v-if="user.id === userId">
+                                <h1 class="border-bot-only">User Info</h1>
+                                <p>First Name: {{ user.fName }}</p>
+                                <p>Middle Name: {{ user.mName }}</p>
+                                <p>Last Name: {{ user.lName }}</p>
+                                <p >Email: {{ user.email }}</p>
+
+                            </div>
+                            
+                        </div>
+                        
+                        <template #footer>
+                            <Button label="Close" icon="pi pi-times" @click="visible = false" text />
+                            <Button label="Print" icon="pi pi-check" @click="printPage" autofocus />
+                        </template>
+                    </Dialog>
+                </div>
             </div>
     </DashboardLayout>
 </template>
@@ -72,9 +94,11 @@ import {ref, computed } from 'vue'
 import {Link, usePage} from '@inertiajs/vue3'
 import { useToast } from 'primevue/usetoast';
 
-
+const visible = ref(false);
+const userId =ref(1)
 
 //page.props.value.flash.success    <<<< to accesss data
+
 
 
 
@@ -88,6 +112,19 @@ defineProps({
 })
 
 const user = usePage().props.user;
+
+//modal toggler
+const openModal = (id)=> {
+    visible.value = true
+    userId.value = id
+    
+    
+}
+
+// print
+const printPage = ()=>{
+    window.print()
+}
 const toUpperFirst = (str)=>{
     let firstLetter = str.charAt(0);
     let capFirstLetter = firstLetter.toUpperCase();
