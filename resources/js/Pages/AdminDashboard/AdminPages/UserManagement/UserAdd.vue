@@ -87,10 +87,10 @@
                     <h1 class="text-gray-600 text-[16px]">Gender :</h1>
                     <div class="w-full mb-4 col-span-12 md:col-span-4 flex align-items-center space-x-4 items-center">
                         <RadioButton v-model="selectedGender" inputId="male" name="male" value="male" />
-                        <label for="ingredient1" class="ml-2">Male</label>
+                        <label for="male" class="ml-2 cursor-pointer">Male</label>
                         
                         <RadioButton v-model="selectedGender" inputId="female" name="female" value="female" />
-                        <label for="ingredient1" class="ml-2">Female</label>
+                        <label for="female" class="ml-2 cursor-pointer">Female</label>
                         <InputError :error="form.errors.gender"/>
                     </div>
                     
@@ -100,10 +100,10 @@
                     <h1 class="text-gray-600 text-[16px]">Civil Status :</h1>
                     <div class="w-full mb-4 col-span-12 md:col-span-4 flex align-items-center space-x-4 items-center">
                         <RadioButton v-model="selectedCivilStatus" inputId="single" name="single" value="single" />
-                        <label for="ingredient1" class="ml-2">Single</label>
+                        <label for="single" class="ml-2 cursor-pointer">Single</label>
 
                         <RadioButton v-model="selectedCivilStatus" inputId="married" name="married" value="married" />
-                        <label for="ingredient1" class="ml-2">Married</label>
+                        <label for="married" class="ml-2 cursor-pointer">Married</label>
                         <InputError :error="form.errors.civilStatus"/>
                     </div>
                 </div>

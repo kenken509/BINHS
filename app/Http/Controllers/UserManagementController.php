@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\UserCollection;
 use Illuminate\Http\Request;
@@ -26,14 +26,14 @@ class UserManagementController extends Controller
     public function userStore(Request $request){
 
         //authenticate to register new account
-        
         $date = date_create($request->date);
         $formattedDate = date_format($date,'m/d/Y');
         $request->date = $formattedDate;
+
         
+        //$defaultPassword = $request->lName;
+        //$request->password = $defaultPassword;
         
-        $defaultPassword = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi';
-        $request->password = $defaultPassword;
         
         if($request->hasFile('image')){
         
@@ -84,6 +84,7 @@ class UserManagementController extends Controller
                     'subject'                   => 'Subject is required',
                     
                 ]));
+                $user->password = $request->lName; // hashed using accessor mutator in User model
                 $user->birthDate = $formattedDate;
                 $user->image = $storeName;
                 $user->save();
@@ -124,6 +125,7 @@ class UserManagementController extends Controller
                     'role'                      => 'Role is required',
                     
                 ]));
+                $user->password = $request->lName; // hashed using accessor mutator in User model
                 $user->birthDate = $formattedDate;
                 $user->image = $storeName;
                 $user->save();
@@ -166,6 +168,7 @@ class UserManagementController extends Controller
                     'role'                      => 'Role is required',
                     'subject'                   => 'Subject is required',
                 ]));
+                $user->password = $request->lName; // hashed using accessor mutator in User model
                 $user->birthDate = $formattedDate;
                 $user->save();
             return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
@@ -196,6 +199,7 @@ class UserManagementController extends Controller
                     'role'                      => 'Role is required',
                     
                 ]));
+                $user->password = $request->lName; // hashed using accessor mutator in User model
                 $user->birthDate = $formattedDate;
                 $user->save();
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
