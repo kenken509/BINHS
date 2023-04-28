@@ -33,8 +33,10 @@ class UserFactory extends Factory
             'province' => '0421',
             'city'  => '042118',
             'barangay' => '042118047',
-            'subject' => null,
+            'subject_id' => null,
             'role' =>'admin',
+            'fatherName' => fake()->firstNameMale(),
+            'motherName' => fake()->firstNameFemale(),
             'remember_token' => Str::random(10),
         ];
     }

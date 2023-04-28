@@ -1,8 +1,15 @@
 <template>
     <DashboardLayout :user="user">
             <div class="flex flex-col ">
-                <div class="border-bot-only border-gray-600 shadow-md">
-                    <span class="text-[20px] font-bold text-gray-500">All Users Page</span>
+                <div class="grid grid-cols-6 items-center justify-between border-bot-only border-gray-600 shadow-md py-2">
+                    <div class="col-span-6 md:col-span-5">
+                        <span class="text-[20px] font-bold text-gray-500">All Users Page</span>
+                    </div>
+                    <div class="col-span-6 md:col-span-1 item-center">
+                        <form @submit.prevent="submit">
+                            <Dropdown  v-model="selectedRole" :options="filter" optionLabel="role" placeholder="Filter by role" class="w-full md:w-14rem " />
+                        </form> 
+                    </div>
                     
                 </div>
                 <div v-if="$page.props.flash.success" class="flex items-center rounded-md bg-[#28a745] my-4 h-8 "><span class="p-3 text-gray-200">{{ $page.props.flash.success }}</span></div>
@@ -90,13 +97,44 @@
 <script setup>
 import DashboardLayout from '../../Layout/DashboardLayout.vue';
 import Pagination from '../../AdminComponents/Pagination.vue';
-import {ref, computed } from 'vue'
-import {Link, usePage} from '@inertiajs/vue3'
+import {ref, computed, watch } from 'vue'
+import {Link, useForm, usePage} from '@inertiajs/vue3'
 import { useToast } from 'primevue/usetoast';
 
+const filter = ref([
+    {
+        'role':'All',
+        'value': 'all'
+    },
+    {
+        'role':'Admin',
+        'value': 'admin'
+    },
+    {
+        'role': 'Instructor',
+        'value': 'instructor'
+    },
+    {
+        'role': 'Student',
+        'value': 'student'
+    }
+])
 const visible = ref(false);
 const userId =ref(1)
+const selectedRole = ref(null);
+const selectedFilter = useForm({
+    role : null,
+});
 
+watch(selectedRole,(val) =>{
+    // do something!
+    selectedFilter.role = val.value
+
+    const submit = selectedFilter.post(route('admin.showAllUsers'),{
+        preserveScroll: true,
+    });
+    
+})
 //page.props.value.flash.success    <<<< to accesss data
 
 

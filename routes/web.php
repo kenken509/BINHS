@@ -41,10 +41,11 @@ Route::controller(StrandsController::class)->group(function(){
 });
 
 Route::controller(UserManagementController::class)->group(function(){
-    Route::get('/admin/panel/users-all', 'showAllUsers')->name('admin.showAllUsers');
+    Route::match(['get','post'],'/admin/panel/users-all', 'showAllUsers')->name('admin.showAllUsers');
     Route::get('/admin/panel/user-add', 'showAddUser')->name('admin.addUser');
     Route::get('/admin/panel/user-edit/{id}', 'showEditUser')->name('admin.editUser');
     Route::delete('/admin/panel/user-delete/{user}', 'userDelete')->name('admin.userDelete');
     Route::post('/admin/panel/user-store', 'userStore')->name('admin.userStore');
     
 });
+

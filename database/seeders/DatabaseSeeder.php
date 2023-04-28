@@ -19,5 +19,21 @@ class DatabaseSeeder extends Seeder
             'email' => 'kenortz@gmail.com',
             'phoneNumber' => '639191234567'
         ]);
+
+        // \App\Models\Subject::factory(1)->create([
+        //     'name' => 'HOME ECONOMIS'
+        // ]);
+
+        // \App\Models\Subject::factory(1)->create([
+        //     'name' => 'ICT'
+        // ]);
+
+        // \App\Models\Subject::factory(1)->create([
+        //     'name' => 'INDUSTRIAL ARTS'
+        // ]);
+
+        // \App\Models\Subject::factory(1)->create([
+        //     'name' => 'SMAW'
+        // ]);
     }
 }

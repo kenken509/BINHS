@@ -12,8 +12,8 @@
                     <Dropdown  v-model="selectedRole" :options="roleList" optionLabel="role" placeholder="Select a Role" class="w-full md:w-14rem " />
                     <InputError :error="form.errors.role"/>
                 </div>
-                <div v-if="isTeacher" class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
-                    <Dropdown  v-model="selectedSubject" :options="subjectList" optionLabel="title" placeholder="Select a Subject" class="w-full md:w-14rem " />
+                <div v-if="isTeacher || isStudent" class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
+                    <Dropdown  v-model="selectedSubject" :options="props.subjects" optionLabel="name" placeholder="Select a Subject" class="w-full md:w-14rem " />
                     <InputError :error="form.errors.subject"/>
                 </div>
 
@@ -69,18 +69,18 @@
                 <!-- parents name -->
                 <div  v-if="isStudent" class="w-full mb-4 col-span-12 md:col-span-6 ">
                     <span v-if="isStudent" class="p-float-label">
-                        <InputText id="fatherName" v-model="form.mName" class="w-full" />
+                        <InputText id="fatherName" v-model="form.fatherName" class="w-full" />
                         <label for="fatherName">Father's name</label>
                     </span>
-                    <InputError :error="form.errors.mName"/>
+                    <InputError :error="form.errors.fatherName"/>
                 </div>
 
                 <div v-if="isStudent" class="w-full mb-4 col-span-12 md:col-span-6 " >
                     <span class="p-float-label">
-                        <InputText id="motherName" v-model="form.mName" class="w-full" />
+                        <InputText id="motherName" v-model="form.motherName" class="w-full" />
                         <label for="motherName">Mother's name</label>
                     </span>
-                    <InputError :error="form.errors.mName"/>
+                    <InputError :error="form.errors.motherName"/>
                 </div>
 
                 <div class="w-full mb-4 col-span-12 md:col-span-4 space-y-2 mx-4" >
@@ -171,6 +171,10 @@ import { useForm, usePage } from '@inertiajs/vue3'
 import InputError from '../../../GlobalComponent/InputError.vue';
 
 
+const props = defineProps({
+    subjects:Array
+})
+
 
 const cleanup = ()=>{
     URL.revokeObjectURL(imageUrl.value);
@@ -212,20 +216,7 @@ const roleList = ref([
         'role': 'student'
     }
 ])
-const subjectList = ref([
-    {
-        'title': 'home Economics'
-    },
-    {
-        'title': 'ict'
-    },
-    {
-        'title': 'industrial arts'
-    },
-    {
-        'title': 'smaw'
-    }
-])
+//const subjectList = ref()
 
 
 regions().then((region)=> regionList.value = region)
@@ -252,7 +243,7 @@ watch([selectedGender, selectedCivilStatus, isStudent], ([newSelectedGender, new
 
 watch(selectedSubject,(val) =>{
     //console.log(val)
-    form.subject = val.title
+    form.subject_id = val.id
 })
 
 watch(selectedRole, (val) =>{ 
@@ -318,7 +309,7 @@ const form = useForm({
     city: null,
     barangay: null,
     role: null,
-    subject: null,
+    subject_id: null,
     password: null,
     fatherName:null,
     motherName:null,

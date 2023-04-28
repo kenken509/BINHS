@@ -24,14 +24,21 @@ return new class extends Migration
             $table->string('phoneNumber');
             $table->string('birthDate');
             $table->string('password')->default('$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'); //password
+            $table->string('fatherName')->nullable();
+            $table->string('motherName')->nullable();
             //address columns
             $table->String('region');
             $table->String('province');
             $table->String('city');
             $table->String('barangay');
-            $table->enum('subject',['home economics','ict','industrial arts', 'smaw'])->nullable();
             $table->enum('role', ['admin','instructor','student' ]);
+            $table->unsignedBigInteger('subject_id')->nullable();
             $table->rememberToken();
+            // accountability
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
+
+            $table->foreign('subject_id')->references('id')->on('subjects')->restrictOnDelete()->restrictOnUpdate();
             $table->timestamps();
         });
     }
