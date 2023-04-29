@@ -24,7 +24,7 @@ class UserFactory extends Factory
             'gender' => 'male',
             'civilStatus' => 'single',
             'phoneNumber' => fake()->phoneNumber(),
-            'birthDate' => fake()->date('m/d/Y'),
+            'birthDate' => fake()->date(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'image' => null,

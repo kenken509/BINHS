@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -22,7 +23,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('phoneNumber');
-            $table->string('birthDate');
+            $table->date('birthDate')->nullable();
+            $table->integer('age')->nullable();
             $table->string('password')->default('$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'); //password
             $table->string('fatherName')->nullable();
             $table->string('motherName')->nullable();
@@ -41,6 +43,8 @@ return new class extends Migration
             $table->foreign('subject_id')->references('id')->on('subjects')->restrictOnDelete()->restrictOnUpdate();
             $table->timestamps();
         });
+
+        
     }
 
     /**

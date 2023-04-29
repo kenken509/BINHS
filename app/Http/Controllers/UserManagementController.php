@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Subject;
+use App\Models\TestModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserCollection;
@@ -16,40 +18,15 @@ class UserManagementController extends Controller
         //dd(User::orderByDesc('created_at')->paginate(10));
         
         $filters = $request->role;
-            
+        $test = Subject::findOrFail(1)->user();
+        //$test->all();
         
-        $query = User::orderByDesc('created_at');
-
-        if($filters){
-            if($filters == 'admin'){
-                $query->where('role','admin');
-            }
-            elseif($filters == 'instructor'){
-                $query->where('role','instructor');
-            }elseif($filters == 'student'){
-                $query->where('role','student');
-            }
-            else{
-                $query = User::orderByDesc('created_at');
-            }
-        }
-
-        // if($filters == 'admin'){
-        //     dd('admin lang');
-        // }elseif($filters['instructor']){
-        //     dd('instructor lange');
-        // }elseif($filters['student']){
-        //     dd('student lang');
-        // }else{
-        //     return inertia('AdminDashboard/AdminPages/UserManagement/UsersAll',[
-        //         'users' =>$query->paginate(10),
-        //     ]);
-        // }
+        $query = User::latest();
+        //dd($query);
+        //dd($query);
         
-
-
         return inertia('AdminDashboard/AdminPages/UserManagement/UsersAll',[
-            'users' =>$query->paginate(10),
+            'users' =>$query->filteredData($filters)->paginate(10),
         ]);
     }
 
@@ -62,10 +39,19 @@ class UserManagementController extends Controller
     public function userStore(Request $request){
         
         //authenticate to register new account
+        
         $date = date_create($request->date);
-        $formattedDate = date_format($date,'m/d/Y');
-        $request->date = $formattedDate;
 
+        
+        // $formattedDate = date_format($date,'m/d/Y');
+        
+        $age = Carbon::parse($request->birthDate)->age;
+        
+        
+      
+        
+
+        
         
         //$defaultPassword = $request->lName;
         //$request->password = $defaultPassword;
@@ -80,21 +66,21 @@ class UserManagementController extends Controller
             ]); //Image file type must be in jpg,png,jpeg format. Maximum size: 3mb]);
             
             if($request->role == 'instructor'){ // if instructor
-                $file = $request->file('image')[0];
-                $originalName = $file->getClientOriginalName();
-                $email = $request->email;
-                $cleanedString = str_replace(".", "_", $email);
-                $newName = $cleanedString.$originalName;
-                $path = $file->storeAs('images',$newName, 'public');
+                $file           = $request->file('image')[0];
+                $originalName   = $file->getClientOriginalName();
+                $email          = $request->email;
+                $cleanedString  = str_replace(".", "_", $email);
+                $newName        = $cleanedString.$originalName;
+                $path           = $file->storeAs('images',$newName, 'public');
                 $request->image = $path;
-                $storeName = $request->image = $path;
+                $storeName      = $request->image = $path;
                 //dd($request->image);
                 
                     //dd('im here @ under path');
                 $user = User::make($request->validate([ //  "make" function creates a new instance of the model but not stored yet
-                    'fName'     => 'required',
-                    'mName'    => 'required',
-                    'lName'      => 'required',
+                    'fName'         => 'required',
+                    'mName'         => 'required',
+                    'lName'         => 'required',
                     'gender'        => 'required',
                     'civilStatus'   => 'required',
                     'email'         => 'required|email|unique:users', //unique:user means email field should be unique in the users table
@@ -107,6 +93,7 @@ class UserManagementController extends Controller
                     'barangay'      => 'required',
                     'role'          => 'required',
                     'subject_id'    => 'required',
+                    'age'           => 'nullable',
         
                 ],[
                     'fName'                     => 'The first name field is required',
@@ -123,28 +110,29 @@ class UserManagementController extends Controller
                     'subject_id'                   => 'Subject is required',
                     
                 ]));
-                $user->password = $request->lName; // hashed using accessor mutator in User model
-                $user->birthDate = $formattedDate;
-                $user->image = $storeName;
+                $user->age          = $age;
+                $user->password     = $request->lName; // hashed using accessor mutator in User model
+                $user->birthDate    = $date;
+                $user->image        = $storeName;
                 $user->save();
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
             elseif($request->role == 'student'){ //student with image
-                $file = $request->file('image')[0];
-                $originalName = $file->getClientOriginalName();
-                $email = $request->email;
-                $cleanedString = str_replace(".", "_", $email);
-                $newName = $cleanedString.$originalName;
-                $path = $file->storeAs('images',$newName, 'public');
-                $request->image = $path;
-                $storeName = $request->image = $path;
+                $file               = $request->file('image')[0];
+                $originalName       = $file->getClientOriginalName();
+                $email              = $request->email;
+                $cleanedString      = str_replace(".", "_", $email);
+                $newName            = $cleanedString.$originalName;
+                $path               = $file->storeAs('images',$newName, 'public');
+                $request->image     = $path;
+                $storeName          = $request->image = $path;
                 //dd($request->image);
                 
                     //dd('im here @ under path');
                 $user = User::make($request->validate([ //  "make" function creates a new instance of the model but not stored yet
-                    'fName'     => 'required',
-                    'mName'    => 'required',
-                    'lName'      => 'required',
+                    'fName'         => 'required',
+                    'mName'         => 'required',
+                    'lName'         => 'required',
                     'gender'        => 'required',
                     'civilStatus'   => 'required',
                     'email'         => 'required|email|unique:users', //unique:user means email field should be unique in the users table
@@ -159,6 +147,7 @@ class UserManagementController extends Controller
                     'subject_id'       => 'required',
                     'fatherName'    => 'required',
                     'motherName'    => 'required',
+                    'age'           => 'nullable',
         
                 ],[
                     'fName'                     => 'The first name field is required',
@@ -177,9 +166,10 @@ class UserManagementController extends Controller
                     'motherName'                => "The mother's name field is required",
                     
                 ]));
-                $user->password = $request->lName; // hashed using accessor mutator in User model
-                $user->birthDate = $formattedDate;
-                $user->image = $storeName;
+                $user->age          = $age;
+                $user->password     = $request->lName; // hashed using accessor mutator in User model
+                $user->birthDate    = $date;
+                $user->image        = $storeName;
                 $user->save();
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
@@ -194,9 +184,9 @@ class UserManagementController extends Controller
                 
                     //dd('im here @ under path');
                 $user = User::make($request->validate([ //  "make" function creates a new instance of the model but not stored yet
-                    'fName'     => 'required',
-                    'mName'    => 'required',
-                    'lName'      => 'required',
+                    'fName'         => 'required',
+                    'mName'         => 'required',
+                    'lName'         => 'required',
                     'gender'        => 'required',
                     'civilStatus'   => 'required',
                     'email'         => 'required|email|unique:users', //unique:user means email field should be unique in the users table
@@ -207,6 +197,7 @@ class UserManagementController extends Controller
                     'city'          => 'required',
                     'barangay'      => 'required',
                     'role'          => 'required',
+                    'age'           => 'nullable',
                     
                 ],[
                     'fName'                     => 'The first name field is required',
@@ -222,9 +213,10 @@ class UserManagementController extends Controller
                     'role'                      => 'Role is required',
                     
                 ]));
-                $user->password = $request->lName; // hashed using accessor mutator in User model
-                $user->birthDate = $formattedDate;
-                $user->image = $storeName;
+                $user->age          = $age;
+                $user->password     = $request->lName; // hashed using accessor mutator in User model
+                $user->birthDate    = $date;
+                $user->image        = $storeName;
                 $user->save();
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
@@ -283,6 +275,7 @@ class UserManagementController extends Controller
                     'subject_id'    => 'required',
                     'fatherName'    => 'required',
                     'motherName'    => 'required',
+                    'age'           => 'nullable',
         
                 ],[
                     'fName'                     => 'The first name field is required',
@@ -298,16 +291,17 @@ class UserManagementController extends Controller
                     'role'                      => 'Role is required',
                     'subject_id'                => 'Subject is required',
                 ]));
-                $user->password = $request->lName; // hashed using accessor mutator in User model
-                $user->birthDate = $formattedDate;
+                $user->age          = $age;
+                $user->password     = $request->lName; // hashed using accessor mutator in User model
+                $user->birthDate    = $date;
                 $user->save();
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
             else{ //if admin
                 $user = User::make($request->validate([ //  "make" function creates a new instance of the model but not stored yet
-                    'fName'     => 'required',
-                    'mName'    => 'required',
-                    'lName'      => 'required',
+                    'fName'         => 'required',
+                    'mName'         => 'required',
+                    'lName'         => 'required',
                     'gender'        => 'required',
                     'civilStatus'   => 'required',
                     'email'         => 'required|email|unique:users', //unique:user means email field should be unique in the users table
@@ -318,6 +312,7 @@ class UserManagementController extends Controller
                     'city'          => 'required',
                     'barangay'      => 'required',
                     'role'          => 'required',
+                    'age'           => 'nullable',
                     
                 ],[
                     'fName'                     => 'The first name field is required',
@@ -333,8 +328,9 @@ class UserManagementController extends Controller
                     'role'                      => 'Role is required',
                     
                 ]));
-                $user->password = $request->lName; // hashed using accessor mutator in User model
-                $user->birthDate = $formattedDate;
+                $user->age          = $age;
+                $user->password     = $request->lName; // hashed using accessor mutator in User model
+                $user->birthDate    = $date;
                 $user->save();
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
@@ -397,9 +393,9 @@ class UserManagementController extends Controller
 
     public function showEditUser($id){
 
-            //dd(User::findOrFail($id));
+        //dd(User::findOrFail($id)->with('subject')->get());
         return inertia('AdminDashboard/AdminPages/UserManagement/UserEdit',[
-            'user' => User::findOrFail($id),
+            'user' => User::findOrFail($id)->with('subject')->get(),
         ]);
     }
 

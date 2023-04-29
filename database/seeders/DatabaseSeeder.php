@@ -12,16 +12,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        //\App\Models\User::factory(30)->create();
+        \App\Models\TestModel::factory(2)->create();
 
-        \App\Models\User::factory()->create([
-            'fName' => 'aries',
-            'email' => 'kenortz@gmail.com',
-            'phoneNumber' => '639191234567'
-        ]);
+        // \App\Models\User::factory()->create([
+        //     'fName' => 'aries',
+        //     'email' => 'kenortz@gmail.com',
+        //     'phoneNumber' => '639191234567',
+        // ]);
 
         // \App\Models\Subject::factory(1)->create([
-        //     'name' => 'HOME ECONOMIS'
+        //     'name' => 'HOME ECONOMICS'
         // ]);
 
         // \App\Models\Subject::factory(1)->create([
@@ -35,5 +35,7 @@ class DatabaseSeeder extends Seeder
         // \App\Models\Subject::factory(1)->create([
         //     'name' => 'SMAW'
         // ]);
+
+
     }
 }

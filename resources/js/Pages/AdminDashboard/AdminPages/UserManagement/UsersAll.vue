@@ -74,11 +74,18 @@
                     <Dialog v-model:visible="visible" modal   :userId="userId" :style="{ width: '50vw' } ">
                         <div v-for="user in users.data" :key="user.id">
                             <div v-if="user.id === userId">
+                                <img :src="user.image ? appUrl+user.image:appUrl+defaultImage" alt="error" class="w-[50px] h-[50px]"/>
                                 <h1 class="border-bot-only">User Info</h1>
+                                <p>Role: {{ user.role }}</p>
                                 <p>First Name: {{ user.fName }}</p>
                                 <p>Middle Name: {{ user.mName }}</p>
                                 <p>Last Name: {{ user.lName }}</p>
+                                <p>Gender: {{ user.gender }}</p>
+                                <p>Civil Status: {{ user.civilStatus }}</p>
                                 <p >Email: {{ user.email }}</p>
+                                <p>Birthday: {{ user.birthDate }}</p>
+                                <p>Age: {{ user.age }}</p>
+                                <p>Contact #: {{ user.phoneNumber }}</p>
 
                             </div>
                             
@@ -100,6 +107,9 @@ import Pagination from '../../AdminComponents/Pagination.vue';
 import {ref, computed, watch } from 'vue'
 import {Link, useForm, usePage} from '@inertiajs/vue3'
 import { useToast } from 'primevue/usetoast';
+import { toUpperFirst } from '../../../Functions/Methods.vue';
+
+
 
 const filter = ref([
     {
@@ -163,14 +173,7 @@ const openModal = (id)=> {
 const printPage = ()=>{
     window.print()
 }
-const toUpperFirst = (str)=>{
-    let firstLetter = str.charAt(0);
-    let capFirstLetter = firstLetter.toUpperCase();
-    let restOfString = str.slice(1);
-    let result = capFirstLetter + restOfString;
 
-    return result;
-}
 const appUrl = 'http://127.0.0.1:8000/storage/'
 const defaultImage = 'images/default.png'
 </script>

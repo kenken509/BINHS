@@ -9,6 +9,10 @@ class Subject extends Model
 {
     use HasFactory;
 
-    
     protected $guarded = [];
+
+    public function user(){
+        return $this->hasMany(User::class, 'id', 'subject_id');
+    }
+
 }

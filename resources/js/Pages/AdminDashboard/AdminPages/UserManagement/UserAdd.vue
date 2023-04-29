@@ -313,6 +313,7 @@ const form = useForm({
     password: null,
     fatherName:null,
     motherName:null,
+    age:null,
 })
 
 const imageErrors = computed(()=> Object.values(form.errors))

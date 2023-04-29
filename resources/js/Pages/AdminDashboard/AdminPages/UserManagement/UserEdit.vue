@@ -5,9 +5,18 @@
         </div>
         
         <form @submit.prevent="submit">
-            sdfsdfdf
             <div class="grid grid-cols-12   gap-4 w-full mt-12 ">
                 
+                 <!--role-->
+                <div class="w-full mb-4 col-span-12 border-bot-only px-2 ">Role</div>
+                <div class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
+                    <Dropdown  v-model="selectedRole" :options="roleList" optionLabel="role" placeholder="Select a Role" class="w-full md:w-14rem " />
+                    <InputError :error="form.errors.role"/>
+                </div>
+                <div v-if="isTeacher" class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
+                    <Dropdown  v-model="selectedSubject" :options="subjectList" optionLabel="title" placeholder="Select a Subject" class="w-full md:w-14rem " />
+                    <InputError :error="form.errors.subject"/>
+                </div>
                 <div class="col-span-12 mb-3 border-bot-only px-2">Personal Info</div>
                 <div class="w-full col-span-12 md:col-span-4 ">
                     <span class="p-float-label">
@@ -107,16 +116,7 @@
                     <InputError :error="form.errors.barangay"/>
                 </div>
                 
-                <!--role-->
-                <div class="w-full mb-4 col-span-12 border-bot-only px-2 ">Role</div>
-                <div class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
-                    <Dropdown  v-model="selectedRole" :options="roleList" optionLabel="role" placeholder="Select a Role" class="w-full md:w-14rem " />
-                    <InputError :error="form.errors.role"/>
-                </div>
-                <div v-if="isTeacher" class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
-                    <Dropdown  v-model="selectedSubject" :options="subjectList" optionLabel="title" placeholder="Select a Subject" class="w-full md:w-14rem " />
-                    <InputError :error="form.errors.subject"/>
-                </div>
+               
              
 
                 <div class="col-span-12 mb-3 border-bot-only px-2">Avatar</div>
@@ -133,7 +133,7 @@
                     <div v-if="imageErrors.includes('this image')"><InputError :error="'Image file type must be in jpg,png format. Maximum size: 3mb'" /></div>
                     
                     
-                    
+                    {{ user.user[0].subject.name }}
                 </div>
             </div>
             
@@ -174,19 +174,19 @@ const handleSubjectChange = ()=>{
 
 // show selected
 onMounted(()=>{
-    regionByCode(user.user.region).then((region) => {
+    regionByCode(user.user[0].region).then((region) => {
         selectedRegion.value = region
         
         provincesByCode(selectedRegion.value.region_code).then((province) => {
-            const tempProvince = province.filter((prov)=> prov.province_code === user.user.province)
+            const tempProvince = province.filter((prov)=> prov.province_code === user.user[0].province)
             selectedProvince.value = tempProvince[0];
             //console.log(selectedProvince.value)
             cities(selectedProvince.value.province_code).then((city) => {
-                const tempCity = city.filter((town)=> town.city_code === user.user.city)
+                const tempCity = city.filter((town)=> town.city_code === user.user[0].city)
                 selectedCity.value = tempCity[0];
                 //console.log(selectedCity.value)
                 barangays(selectedCity.value.city_code).then((barangays) => {
-                    const tempBarangay = barangays.filter((barangay) => barangay.brgy_code === user.user.barangay)
+                    const tempBarangay = barangays.filter((barangay) => barangay.brgy_code === user.user[0].barangay)
                     selectedBrgy.value = tempBarangay[0]
                     //console.log(selectedBrgy.value)
                 });
@@ -263,10 +263,10 @@ const selectedRegion = ref({})
 const selectedProvince = ref({})
 const selectedCity = ref({})
 const selectedBrgy = ref({})
-const selectedRole = ref({'role': user.user.role})
+const selectedRole = ref({'role': user.user[0].role})
 const selectedSubject = ref({'title': user.user.subject})
-const selectedGender = ref(user.user.gender)
-const selectedCivilStatus = ref(user.user.civilStatus)
+const selectedGender = ref(user.user[0].gender)
+const selectedCivilStatus = ref(user.user[0].civilStatus)
 const isTeacher = ref(false)
 
 
@@ -324,22 +324,21 @@ watch(selectedBrgy, (val) =>{
 })
 
 const form = useForm({
-    fName: user.user.fName,
-    mName: user.user.mName,
-    lName: user.user.lName,
+    fName: user.user[0].fName,
+    mName: user.user[0].mName,
+    lName: user.user[0].lName,
     gender: null,
     civilStatus: null,
-    email: null,
-    phoneNumber: parseInt(user.user.phoneNumber),
-    birthDate: user.user.birthDate,
-    image:user.user.image,
+    email: user.user[0].email,
+    phoneNumber: parseInt(user.user[0].phoneNumber),
+    birthDate: user.user[0].birthDate,
+    image:user.user[0].image,
     region: null,
     province: null,
     city: null,
     barangay: null,
     role: null,
     subject: null,
-    password: null,
 })
 
 const imageErrors = computed(()=> Object.values(form.errors))
