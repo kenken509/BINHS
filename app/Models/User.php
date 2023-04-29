@@ -81,8 +81,10 @@ class User extends Authenticatable
     //relations
 
     public function subject(){
-        return $this->belongsTo(Subject::class, 'id', 'id'); //fist param model , second is the foreignkey in the model table, 3rd is the local key in the user's table)
+        return $this->belongsTo(Subject::class, 'subject_id', 'id'); //fist param model , second is the foreignkey in the model table, 3rd is the local key in the user's table)
     }
 
-    
+    public function testSubject(){
+        return $this->hasOne(TestSubject::class, 'user_id', 'id');
+    }
 }

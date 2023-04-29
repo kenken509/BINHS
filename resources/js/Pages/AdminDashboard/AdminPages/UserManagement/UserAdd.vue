@@ -14,7 +14,7 @@
                 </div>
                 <div v-if="isTeacher || isStudent" class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
                     <Dropdown  v-model="selectedSubject" :options="props.subjects" optionLabel="name" placeholder="Select a Subject" class="w-full md:w-14rem " />
-                    <InputError :error="form.errors.subject"/>
+                    <InputError :error="form.errors.subject_id"/>
                 </div>
 
                 <div class="col-span-12 mb-3 border-bot-only px-2">Personal Info</div>
@@ -247,7 +247,7 @@ watch(selectedSubject,(val) =>{
 })
 
 watch(selectedRole, (val) =>{ 
-     //console.log(val.role)
+     console.log(val.role)
     if(val.role === 'instructor'){
         isTeacher.value = true
         form.role = val.role

@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Subject;
 use App\Models\TestModel;
+use App\Models\TestSubject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserCollection;
@@ -18,7 +19,7 @@ class UserManagementController extends Controller
         //dd(User::orderByDesc('created_at')->paginate(10));
         
         $filters = $request->role;
-        $test = Subject::findOrFail(1)->user();
+        //$test = Subject::findOrFail(1)->user();
         //$test->all();
         
         $query = User::latest();
@@ -37,35 +38,24 @@ class UserManagementController extends Controller
     }
 
     public function userStore(Request $request){
-        
-        //authenticate to register new account
-        
+    
         $date = date_create($request->date);
 
-        
-        // $formattedDate = date_format($date,'m/d/Y');
-        
         $age = Carbon::parse($request->birthDate)->age;
-        
-        
-      
-        
-
-        
-        
+    
         //$defaultPassword = $request->lName;
         //$request->password = $defaultPassword;
         
-        
+        //dd($request);
         if($request->hasFile('image')){
         
             $request->validate([
                 'image.*'       => 'mimes:jpg,png|max:3000',
             ],[
-                'image.*'                     => 'this image'
+                'image.*'       => 'this image'
             ]); //Image file type must be in jpg,png,jpeg format. Maximum size: 3mb]);
             
-            if($request->role == 'instructor'){ // if instructor
+            if($request->role == 'instructor'){ // if instructor with Image
                 $file           = $request->file('image')[0];
                 $originalName   = $file->getClientOriginalName();
                 $email          = $request->email;
@@ -107,9 +97,10 @@ class UserManagementController extends Controller
                     'city.required'             => 'City is required',
                     'barangay.required'         => 'Baranggay is required',
                     'role'                      => 'Role is required',
-                    'subject_id'                   => 'Subject is required',
+                    'subject_id'                => 'Subject is required',
                     
                 ]));
+                
                 $user->age          = $age;
                 $user->password     = $request->lName; // hashed using accessor mutator in User model
                 $user->birthDate    = $date;
@@ -144,7 +135,7 @@ class UserManagementController extends Controller
                     'city'          => 'required',
                     'barangay'      => 'required',
                     'role'          => 'required',
-                    'subject_id'       => 'required',
+                    'subject_id'    => 'required',
                     'fatherName'    => 'required',
                     'motherName'    => 'required',
                     'age'           => 'nullable',
@@ -226,9 +217,9 @@ class UserManagementController extends Controller
             if($request->role == 'instructor'){ //instructor no image
                
                 $user = User::make($request->validate([ //  "make" function creates a new instance of the model but not stored yet
-                    'fName'     => 'required',
-                    'mName'    => 'required',
-                    'lName'      => 'required',
+                    'fName'         => 'required',
+                    'mName'         => 'required',
+                    'lName'         => 'required',
                     'gender'        => 'required',
                     'civilStatus'   => 'required',
                     'email'         => 'required|email|unique:users', //unique:user means email field should be unique in the users table
@@ -250,10 +241,14 @@ class UserManagementController extends Controller
                     'city.required'             => 'City is required',
                     'barangay.required'         => 'Baranggay is required',
                     'role'                      => 'Role is required',
-                    'subject_id'                   => 'Subject is required',
+                    'subject_id'                => 'Subject is required',
+                    'fName'                     => 'The first name field is required',
+                    'mName'                     => 'The middle name field is required',
+                    'lName'                     => 'The last name field is required',
                 ]));
-                $user->password = $request->lName; // hashed using accessor mutator in User model
-                $user->birthDate = $formattedDate;
+                $user->age          = $age;
+                $user->password     = $request->lName; // hashed using accessor mutator in User model
+                $user->birthDate    = $date;
                 $user->save();
             return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
@@ -393,16 +388,23 @@ class UserManagementController extends Controller
 
     public function showEditUser($id){
 
-        //dd(User::findOrFail($id)->with('subject')->get());
+        //dd(User::findOrFail($id)->subject);
+        //dd(User::with('subject')->get());
         return inertia('AdminDashboard/AdminPages/UserManagement/UserEdit',[
-            'user' => User::findOrFail($id)->with('subject')->get(),
+            'user' => User::findOrFail($id),
+            'userSubject' => User::findOrFail($id)->subject,
+            'subjects' => Subject::all()
         ]);
     }
 
 
     public function userDelete(User $user){
 
-        Storage::disk('public')->delete($user->image);    //delete image
+        //delete image if there's one
+        if($user->image){
+            Storage::disk('public')->delete($user->image);
+        }
+            
         $user->delete();
         return redirect()->back()->with('success', 'Deleted Successfully');
     }

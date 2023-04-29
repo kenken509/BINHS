@@ -12,7 +12,7 @@ class Subject extends Model
     protected $guarded = [];
 
     public function user(){
-        return $this->hasMany(User::class, 'id', 'subject_id');
+        return $this->hasMany(User::class,'subject_id', 'id');
     }
 
 }

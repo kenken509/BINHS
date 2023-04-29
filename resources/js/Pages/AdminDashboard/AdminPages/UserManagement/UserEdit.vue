@@ -6,16 +6,17 @@
         
         <form @submit.prevent="submit">
             <div class="grid grid-cols-12   gap-4 w-full mt-12 ">
-                
+                    
                  <!--role-->
                 <div class="w-full mb-4 col-span-12 border-bot-only px-2 ">Role</div>
                 <div class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
                     <Dropdown  v-model="selectedRole" :options="roleList" optionLabel="role" placeholder="Select a Role" class="w-full md:w-14rem " />
                     <InputError :error="form.errors.role"/>
                 </div>
-                <div v-if="isTeacher" class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
-                    <Dropdown  v-model="selectedSubject" :options="subjectList" optionLabel="title" placeholder="Select a Subject" class="w-full md:w-14rem " />
-                    <InputError :error="form.errors.subject"/>
+                <div v-if="isTeacher || isStudent" class="w-full mb-4 col-span-12 md:col-span-4 lg:col-span-3" >
+                    <Dropdown  v-model="selectedSubject" :options="subjects" optionLabel="name" placeholder="Select a Subject" class="w-full md:w-14rem " />
+                    <InputError :error="form.errors.subject_id"/>
+                    
                 </div>
                 <div class="col-span-12 mb-3 border-bot-only px-2">Personal Info</div>
                 <div class="w-full col-span-12 md:col-span-4 ">
@@ -118,10 +119,11 @@
                 
                
              
-
+                
                 <div class="col-span-12 mb-3 border-bot-only px-2">Avatar</div>
                 <div class="col-span-12  px-6" >
-                    <img  :src="imageUrl  ? imageUrl: appUrl+defaultImage" alt="Uploaded Image" class="w-[100px] h-[100px] rounded-full">
+                    <img v-if="!imageUrl" :src="user.user.image ? appUrl+user.user.image:appUrl+defaultImage" alt="error this" class="w-[100px] h-[100px] rounded-full">
+                    <img v-else :src="imageUrl  ? imageUrl: appUrl+defaultImage" alt="Uploaded Image" class="w-[100px] h-[100px] rounded-full">
                 </div>
                 <div class="flex flex-col col-span-12 px-4">
                     <label for="myfile" class="mb-2 cursor-pointer">Profile Picture</label>
@@ -132,8 +134,8 @@
                     </progress>
                     <div v-if="imageErrors.includes('this image')"><InputError :error="'Image file type must be in jpg,png format. Maximum size: 3mb'" /></div>
                     
-                    
-                    {{ user.user[0].subject.name }}
+                
+                   
                 </div>
             </div>
             
@@ -154,12 +156,19 @@ import { useForm, usePage } from '@inertiajs/vue3'
 import InputError from '../../../GlobalComponent/InputError.vue';
 
 const user = defineProps({
-    user: Object
+    subjects:Array,
+    user: Object,
+    userSubject: Object,
+    
 })
+
+
 
 const cleanup = ()=>{
     URL.revokeObjectURL(imageUrl.value);
 }
+
+regions().then((region)=> regionList.value = region)
 
 onBeforeUnmount(cleanup);
 
@@ -174,30 +183,39 @@ const handleSubjectChange = ()=>{
 
 // show selected
 onMounted(()=>{
-    regionByCode(user.user[0].region).then((region) => {
+    regionByCode(user.user.region).then((region) => {
         selectedRegion.value = region
         
         provincesByCode(selectedRegion.value.region_code).then((province) => {
-            const tempProvince = province.filter((prov)=> prov.province_code === user.user[0].province)
+            const tempProvince = province.filter((prov)=> prov.province_code === user.user.province)
             selectedProvince.value = tempProvince[0];
-            //console.log(selectedProvince.value)
+           
             cities(selectedProvince.value.province_code).then((city) => {
-                const tempCity = city.filter((town)=> town.city_code === user.user[0].city)
+                const tempCity = city.filter((town)=> town.city_code === user.user.city)
                 selectedCity.value = tempCity[0];
-                //console.log(selectedCity.value)
+                
                 barangays(selectedCity.value.city_code).then((barangays) => {
-                    const tempBarangay = barangays.filter((barangay) => barangay.brgy_code === user.user[0].barangay)
+                    const tempBarangay = barangays.filter((barangay) => barangay.brgy_code === user.user.barangay)
                     selectedBrgy.value = tempBarangay[0]
-                    //console.log(selectedBrgy.value)
+                   
                 });
             });
         });
     });
-    // regions().then((region) => console.log(region));
-    // provinces("04").then((province) => console.log(province));
-    //cities("0421").then((city) => console.log(city));
-    //barangays("042118").then((barangays) => console.log(barangays));
-    //console.log('this is the province: '+user.user.province)
+    if(user.user.role === 'instructor'){
+        isTeacher.value = true
+        form.role = user.user.role
+    }
+    else if(user.user.role === 'student'){
+        isStudent.value = true;
+        form.role = user.user.role
+    }
+    else{
+        isTeacher.value = false
+        isStudent.value = false
+        form.role = user.user.role
+    }
+    selectedSubject.value = user.userSubject
 })
 
 
@@ -216,43 +234,21 @@ const brgyList = ref([])
 const roleList = ref([
     {
         'role':'admin'
-    },{
+    },
+    {
         'role':'instructor'
-    }
-])
-const subjectList = ref([
-    {
-        'title': 'home Economics'
     },
     {
-        'title': 'ict'
-    },
-    {
-        'title': 'industrial arts'
-    },
-    {
-        'title': 'smaw'
+        'role': 'student'
     }
 ])
 
 
-const regionSelection = ref([]);
-const test = ref([])
-regions().then((region)=> regionList.value = region)
 
-regions().then((region)=> {    
-    //console.log(region.length)
-    for(let i=0;i<region.length;i++){
-       regionSelection.value.push(region[i].region_name)
-    }
-    
-    
-    // for(let i = 0; i <region.length;i++){
-    //     console.log(region.id)
-    // }
-})
 
-//console.log(preSelectRegion)
+
+
+
 
 
 
@@ -263,11 +259,12 @@ const selectedRegion = ref({})
 const selectedProvince = ref({})
 const selectedCity = ref({})
 const selectedBrgy = ref({})
-const selectedRole = ref({'role': user.user[0].role})
-const selectedSubject = ref({'title': user.user.subject})
-const selectedGender = ref(user.user[0].gender)
-const selectedCivilStatus = ref(user.user[0].civilStatus)
+const selectedRole = ref({'role': user.user.role})
+const selectedSubject = ref({})
+const selectedGender = ref(user.user.gender)
+const selectedCivilStatus = ref(user.user.civilStatus)
 const isTeacher = ref(false)
+const isStudent = ref(false)
 
 
 
@@ -284,12 +281,19 @@ watch(selectedSubject,(val) =>{
 })
 
 watch(selectedRole, (val) =>{ 
-     //console.log(val.role)
+     console.log(val.role)
+     console.log('role changed');
     if(val.role === 'instructor'){
         isTeacher.value = true
         form.role = val.role
-    }else{
+    }
+    else if(val.role === 'student'){
+        isStudent.value = true;
+        form.role = val.role
+    }
+    else{
         isTeacher.value = false
+        isStudent.value = false
         form.role = val.role
     }
     
@@ -324,15 +328,15 @@ watch(selectedBrgy, (val) =>{
 })
 
 const form = useForm({
-    fName: user.user[0].fName,
-    mName: user.user[0].mName,
-    lName: user.user[0].lName,
+    fName: user.user.fName,
+    mName: user.user.mName,
+    lName: user.user.lName,
     gender: null,
     civilStatus: null,
-    email: user.user[0].email,
-    phoneNumber: parseInt(user.user[0].phoneNumber),
-    birthDate: user.user[0].birthDate,
-    image:user.user[0].image,
+    email: user.user.email,
+    phoneNumber: parseInt(user.user.phoneNumber),
+    birthDate: user.user.birthDate,
+    image:user.user.image,
     region: null,
     province: null,
     city: null,

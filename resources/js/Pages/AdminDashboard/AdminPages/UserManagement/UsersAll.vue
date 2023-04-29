@@ -86,6 +86,7 @@
                                 <p>Birthday: {{ user.birthDate }}</p>
                                 <p>Age: {{ user.age }}</p>
                                 <p>Contact #: {{ user.phoneNumber }}</p>
+                                <p>Subject: {{ user.subject_id }}</p>
 
                             </div>
                             
