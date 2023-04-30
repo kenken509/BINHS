@@ -24,6 +24,8 @@
                                 <th scope="col" class="px-6 py-4">Full name</th>
                                 <th scope="col" class="px-6 py-4">Email</th>
                                 <th scope="col" class="px-6 py-4">Role</th>
+                                <th scope="col" class="px-6 py-4">Added by:</th>
+                                <th scope="col" class="px-6 py-4">Updated by:</th>
                                 <th scope="col" class="px-6 py-4">Action</th>
                                 </tr>
                             </thead>
@@ -46,6 +48,19 @@
                                     <td class="whitespace-nowrap px-6 py-4">{{ toUpperFirst(user.lName)  }}, {{ toUpperFirst(user.fName) }} {{ user.mName.substring(0,1).toUpperCase() }}.</td>
                                     <td class="whitespace-nowrap px-6 py-4">{{ user.email }}</td>
                                     <td class="whitespace-nowrap px-6 py-4">{{ user.role }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4">
+                                        
+                                        <div v-for="(creator,index) in users.data" :key="index">
+                                            <p v-if="creator.id === user.created_by">{{creator.role }} {{ creator.fName }}</p>
+                                        </div>
+                                    </td>
+                                    <td class="whitespace-nowrap px-6 py-4">
+                                        
+                                        <div v-for="(editor,index) in users.data" :key="index">
+                                            <p v-if="editor.id === user.updated_by">{{editor.role }} {{ editor.fName }}</p>
+                                        </div>
+                                    </td>
+
                                     <td class="whitespace-nowrap px-6 py-4">
                                         <div class=" space-x-6" >
                                             <div v-if="$page.props.flash.success"><Toast position="top-left" /> </div>

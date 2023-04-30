@@ -223,6 +223,7 @@ onMounted(()=>{
     form.image = user.user.image
     form.fatherName = user.user.fatherName
     form.motherName = user.user.motherName
+    
 })
 
 

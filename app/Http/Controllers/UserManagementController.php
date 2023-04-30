@@ -104,6 +104,7 @@ class UserManagementController extends Controller
                 $user->password     = $request->lName; // hashed using accessor mutator in User model
                 $user->birthDate    = $date;
                 $user->image        = $storeName;
+                $user->created_by   = Auth::user()->id;
                 $user->save();
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
@@ -159,6 +160,7 @@ class UserManagementController extends Controller
                 $user->age          = $age;
                 $user->password     = $request->lName; // hashed using accessor mutator in User model
                 $user->birthDate    = $date;
+                $user->created_by   = Auth::user()->id;
                 $user->image        = $path;
                 $user->save();
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
@@ -207,6 +209,7 @@ class UserManagementController extends Controller
                 $user->password     = $request->lName; // hashed using accessor mutator in User model
                 $user->birthDate    = $date;
                 $user->image        = $path;
+                $user->created_by   = Auth::user()->id;
                 $user->save();
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
@@ -248,6 +251,7 @@ class UserManagementController extends Controller
                 $user->age          = $age;
                 $user->password     = $request->lName; // hashed using accessor mutator in User model
                 $user->birthDate    = $date;
+                $user->created_by   = Auth::user()->id;
                 $user->save();
             return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
@@ -288,6 +292,7 @@ class UserManagementController extends Controller
                 $user->age          = $age;
                 $user->password     = $request->lName; // hashed using accessor mutator in User model
                 $user->birthDate    = $date;
+                $user->created_by   = Auth::user()->id;
                 $user->save();
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
@@ -300,7 +305,7 @@ class UserManagementController extends Controller
                     'civilStatus'   => 'required',
                     'email'         => 'required|email|unique:users', //unique:user means email field should be unique in the users table
                     'phoneNumber'   => 'required|min:11|max:12',
-                    'birthDate'     => 'required|date|before:'.now()->subYears(18)->toDateString(),
+                    'birthDate'     => 'required|date|before:'.now()->subYears(17)->toDateString(),
                     'region'        => 'required',
                     'province'      => 'required',
                     'city'          => 'required',
@@ -312,7 +317,7 @@ class UserManagementController extends Controller
                     'fName'                     => 'The first name field is required',
                     'mName'                     => 'The middle name field is required',
                     'lName'                     => 'The last name field is required',
-                    'birthDate.before'          =>'Must be at least 17 years old',
+                    'birthDate.before'          =>'Must be at least 18 years old',
                     'gender.required'           => 'Gender is required',
                     'civilStatus.required'      => 'Status is required',
                     'region.required'           => 'Region is required',
@@ -326,6 +331,7 @@ class UserManagementController extends Controller
                 $user->age          = $age;
                 $user->password     = $request->lName; // hashed using accessor mutator in User model
                 $user->birthDate    = $date;
+                $user->created_by   = Auth::user()->id;
                 $user->save();
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
@@ -349,7 +355,7 @@ class UserManagementController extends Controller
                 'gender'        => 'required',
                 'civilStatus'   => 'required',
                 'phoneNumber'   => 'required|min:11|max:12',
-                'birthDate'     => 'required|date|before:'.now()->subYears(18)->toDateString(),
+                'birthDate'     => 'required|date|before:'.now()->subYears(17)->toDateString(),
                 'image'         =>  'nullable',
                 'region'        => 'required',
                 'province'      => 'required',
@@ -363,7 +369,7 @@ class UserManagementController extends Controller
                 'fName'                     => 'The first name field is required',
                 'mName'                     => 'The middle name field is required',
                 'lName'                     => 'The last name field is required',
-                'birthDate.before'          =>'Must be at least 17 years old',
+                'birthDate.before'          =>'Must be at least 18 years old',
                 'gender.required'           => 'Gender is required',
                 'civilStatus.required'      => 'Status is required',
                 'region.required'           => 'Region is required',
@@ -386,13 +392,15 @@ class UserManagementController extends Controller
                     'phoneNumber'   => $request->phoneNumber,
                     'birthDate'     => $date,
                     'age'           => $age,
-                    'password'      => $request->lName,
+                    'password'      => strtolower($request->lName),
                     'region'        => $request->region,
                     'province'      => $request->province,
                     'city'          => $request->city,
                     'barangay'      => $request->barangay,
                     'role'          => $request->role,
                     'subject_id'    => $request->subject_id,
+                    'fatherName'    => null,
+                    'motherName'    => null,
                     'updated_by'    => Auth::user()->id,
                 ]);
             }
@@ -400,7 +408,123 @@ class UserManagementController extends Controller
             
             return redirect()->route('admin.showAllUsers')->with('success', 'Updated Successfully!');
         }elseif($request->role == 'student'){
-            dd($request);
+            $user = $request->validate([
+                'fName'         => 'required',
+                'mName'         => 'required',
+                'lName'         => 'required',
+                'gender'        => 'required',
+                'civilStatus'   => 'required',
+                'phoneNumber'   => 'required|min:11|max:12',
+                'birthDate'     => 'required|date|before:'.now()->subYears(11)->toDateString(),
+                'image'         =>  'nullable',
+                'region'        => 'required',
+                'province'      => 'required',
+                'city'          => 'required',
+                'barangay'      => 'required',
+                'role'          => 'required',
+                'subject_id'    => 'required',
+                'fatherName'    => 'required',
+                'motherName'    => 'required',
+
+
+                ],[
+                'fName'                     => 'The first name field is required',
+                'mName'                     => 'The middle name field is required',
+                'lName'                     => 'The last name field is required',
+                'birthDate.before'          =>'Must be at least 12 years old',
+                'gender.required'           => 'Gender is required',
+                'civilStatus.required'      => 'Status is required',
+                'region.required'           => 'Region is required',
+                'province.required'         => 'Province is required',
+                'city.required'             => 'City is required',
+                'barangay.required'         => 'Baranggay is required',
+                'role'                      => 'Role is required',
+                'subject_id'                => 'Subject is required',
+           ]);
+
+            if($user){
+                $updateUser = User::findOrFail($request->id)->update([
+                    'fName'                 => $request->fName,
+                    'mName'                 => $request->mName,
+                    'lName'                 => $request->lName,
+                    'gender'                => $request->gender,
+                    'civilStatus'           => $request->civilStatus,
+                    'image'                 => $request->image,
+                    'email'                 => $request->email,
+                    'phoneNumber'           => $request->phoneNumber,
+                    'birthDate'             => $date,
+                    'age'                   => $age,
+                    'password'              => strtolower($request->lName),
+                    'fatherName'            => $request->fatherName,
+                    'motherName'            => $request->mb_output_handler,
+                    'region'                => $request->region,
+                    'province'              => $request->province,
+                    'city'                  => $request->city,
+                    'barangay'              => $request->barangay,
+                    'role'                  => $request->role,
+                    'subject_id'            => $request->subject_id,
+                    'updated_by'            => Auth::user()->id,
+
+                ]);
+            }
+            return redirect()->route('admin.showAllUsers')->with('success', 'Updated Successfully!');
+        }else{ // is admin
+            $user = $request->validate([
+                'fName'         => 'required',
+                'mName'         => 'required',
+                'lName'         => 'required',
+                'gender'        => 'required',
+                'civilStatus'   => 'required',
+                'phoneNumber'   => 'required|min:11|max:12',
+                'birthDate'     => 'required|date|before:'.now()->subYears(17)->toDateString(),
+                'image'         =>  'nullable',
+                'region'        => 'required',
+                'province'      => 'required',
+                'city'          => 'required',
+                'barangay'      => 'required',
+                'role'          => 'required',
+
+                ],[
+                'fName'                     => 'The first name field is required',
+                'mName'                     => 'The middle name field is required',
+                'lName'                     => 'The last name field is required',
+                'birthDate.before'          =>'Must be at least 18 years old',
+                'gender.required'           => 'Gender is required',
+                'civilStatus.required'      => 'Status is required',
+                'region.required'           => 'Region is required',
+                'province.required'         => 'Province is required',
+                'city.required'             => 'City is required',
+                'barangay.required'         => 'Baranggay is required',
+                'role'                      => 'Role is required',
+           ]);
+
+            if($user){
+                $updateUser = User::findOrFail($request->id)->update([
+                    'fName'                 => $request->fName,
+                    'mName'                 => $request->mName,
+                    'lName'                 => $request->lName,
+                    'gender'                => $request->gender,
+                    'civilStatus'           => $request->civilStatus,
+                    'image'                 => $request->image,
+                    'email'                 => $request->email,
+                    'phoneNumber'           => $request->phoneNumber,
+                    'birthDate'             => $date,
+                    'age'                   => $age,
+                    'password'              => strtolower($request->lName),
+                    'region'                => $request->region,
+                    'province'              => $request->province,
+                    'city'                  => $request->city,
+                    'barangay'              => $request->barangay,
+                    'role'                  => $request->role,
+                    'fatherName'            => null,
+                    'motherName'            => null,
+                    'updated_by'            => Auth::user()->id,
+
+                ]);
+            }
+            return redirect()->route('admin.showAllUsers')->with('success', 'Updated Successfully!');
+
+            
         }
         
     }
