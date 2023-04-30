@@ -36,6 +36,7 @@
                                     
                                     <td class="whitespace-nowrap px-6 py-4 font-medium">{{ user.id}}</td>
                                     <td class="whitespace-nowrap px-6 py-4">
+                                        
                                         <Image :src="user.image ? appUrl+user.image:appUrl+defaultImage" alt="Image" width="60" preview>
                                             <template #indicator>
                                                 <i class="pi pi-eye"></i>

@@ -43,13 +43,7 @@
                 </div>
                 
                 
-                <div class="w-full mb-4 col-span-12 md:col-span-4 ">
-                    <span class="p-float-label">
-                        <InputText id="email" v-model="form.email" class="w-full" type="email"/>
-                        <label for="email">Email</label>
-                    </span>
-                    <InputError :error="form.errors.email"/>
-                </div>
+                
 
                 <div class="w-full mb-4 col-span-12 md:col-span-4 " >
                     <span class="p-float-label">
@@ -66,7 +60,27 @@
                     </span>
                     <InputError :error="form.errors.birthDate"/>
                 </div>
+               <!--spacer-->
+               <div v-show="isTeacher" class="w-full mb-4 col-span-12 md:col-span-4 "></div>
+                <!--spacer-->
+                <!-- parents name -->
+                <div  v-if="isStudent" class="w-full mb-4 col-span-12 md:col-span-4 ">
+                    <span v-if="isStudent" class="p-float-label">
+                        <InputText id="fatherName" v-model="form.fatherName" class="w-full" />
+                        <label for="fatherName">Father's name</label>
+                    </span>
+                    <InputError :error="form.errors.fatherName"/>
+                </div>
 
+                <div v-if="isStudent" class="w-full mb-4 col-span-12 md:col-span-4 " >
+                    <span class="p-float-label">
+                        <InputText id="motherName" v-model="form.motherName" class="w-full" />
+                        <label for="motherName">Mother's name</label>
+                    </span>
+                    <InputError :error="form.errors.motherName"/>
+                </div>
+
+                 
                 <div class="w-full mb-4 col-span-12 md:col-span-4 space-y-2 mx-4" >
                     <h1 class="text-gray-600 text-[16px]">Gender :</h1>
                     <div class="w-full mb-4 col-span-12 md:col-span-4 flex align-items-center space-x-4 items-center">
@@ -120,23 +134,8 @@
                
              
                 
-                <div class="col-span-12 mb-3 border-bot-only px-2">Avatar</div>
-                <div class="col-span-12  px-6" >
-                    <img v-if="!imageUrl" :src="user.user.image ? appUrl+user.user.image:appUrl+defaultImage" alt="error this" class="w-[100px] h-[100px] rounded-full">
-                    <img v-else :src="imageUrl  ? imageUrl: appUrl+defaultImage" alt="Uploaded Image" class="w-[100px] h-[100px] rounded-full">
-                </div>
-                <div class="flex flex-col col-span-12 px-4">
-                    <label for="myfile" class="mb-2 cursor-pointer">Profile Picture</label>
-                    <input  type="file" id="myfile" @input="onFileChange" class="mt-2">
-                    
-                    <progress v-if="form.progress" :value="form.progress.percentage" max="100">
-                        {{ form.progress.percentage }}%
-                    </progress>
-                    <div v-if="imageErrors.includes('this image')"><InputError :error="'Image file type must be in jpg,png format. Maximum size: 3mb'" /></div>
-                    
                 
-                   
-                </div>
+                
             </div>
             
             
@@ -164,18 +163,15 @@ const user = defineProps({
 
 
 
-const cleanup = ()=>{
-    URL.revokeObjectURL(imageUrl.value);
-}
 
 regions().then((region)=> regionList.value = region)
 
-onBeforeUnmount(cleanup);
+
 
 const loggedUser = computed(() => usePage().props.user);
 
 
-const imageUrl = ref('');
+
 
 const handleSubjectChange = ()=>{
     console.log('selected subject: '+selectedSubject);
@@ -202,26 +198,36 @@ onMounted(()=>{
             });
         });
     });
+
     if(user.user.role === 'instructor'){
         isTeacher.value = true
+        isStudent.value = false
         form.role = user.user.role
     }
     else if(user.user.role === 'student'){
         isStudent.value = true;
-        form.role = user.user.role
+        isTeacher.value = false;
+        form.role       = user.user.role
     }
     else{
         isTeacher.value = false
         isStudent.value = false
-        form.role = user.user.role
+        form.role       = user.user.role
     }
-    selectedSubject.value = user.userSubject
+    selectedSubject.value       = user.userSubject
+    selectedGender.value        = user.user.gender
+    selectedCivilStatus.value   = user.user.civilStatus
+
+    form.email  = user.user.email
+    form.id     = user.user.id
+    form.image = user.user.image
+    form.fatherName = user.user.fatherName
+    form.motherName = user.user.motherName
 })
 
 
 
-const appUrl = 'http://127.0.0.1:8000/storage/'
-const defaultImage = 'images/default.png'
+
 
 const disabledProvince = ref(true)
 const disabledCity = ref(true)
@@ -261,8 +267,8 @@ const selectedCity = ref({})
 const selectedBrgy = ref({})
 const selectedRole = ref({'role': user.user.role})
 const selectedSubject = ref({})
-const selectedGender = ref(user.user.gender)
-const selectedCivilStatus = ref(user.user.civilStatus)
+const selectedGender = ref('')
+const selectedCivilStatus = ref('')
 const isTeacher = ref(false)
 const isStudent = ref(false)
 
@@ -276,25 +282,33 @@ watch([selectedGender, selectedCivilStatus], ([newSelectedGender, newSelectedCiv
 })
 
 watch(selectedSubject,(val) =>{
-    //console.log(val)
-    form.subject = val.title
+    if(val){
+        if(val.name){
+            form.subject_id = val.id
+            //console.log(val.name)
+        }
+    }
+    
 })
 
 watch(selectedRole, (val) =>{ 
      console.log(val.role)
      console.log('role changed');
     if(val.role === 'instructor'){
+        isStudent.value = false
         isTeacher.value = true
-        form.role = val.role
+        form.role       = val.role
+        
     }
     else if(val.role === 'student'){
+        isTeacher.value = false
         isStudent.value = true;
-        form.role = val.role
+        form.role       = val.role
     }
     else{
         isTeacher.value = false
         isStudent.value = false
-        form.role = val.role
+        form.role       = val.role
     }
     
 })
@@ -328,38 +342,33 @@ watch(selectedBrgy, (val) =>{
 })
 
 const form = useForm({
+    id:null,
     fName: user.user.fName,
     mName: user.user.mName,
     lName: user.user.lName,
     gender: null,
     civilStatus: null,
-    email: user.user.email,
     phoneNumber: parseInt(user.user.phoneNumber),
     birthDate: user.user.birthDate,
-    image:user.user.image,
+    image:null,
     region: null,
     province: null,
     city: null,
     barangay: null,
     role: null,
-    subject: null,
+    subject_id: null,
+    email:null,
+    fatherName:null,
+    motherName:null,
 })
 
-const imageErrors = computed(()=> Object.values(form.errors))
-
-const onFileChange = (event) =>{
-    
-    const file = event.target.files[0];
-    imageUrl.value = URL.createObjectURL(file);
-    
-    form.image.push(event.target.files[0])
-    
-}
 
 
-const submit = ()=> form.post(route('admin.userStore'),{
+
+
+const submit = ()=> form.post(route('admin.userUpdate'),{
     preserveScroll: true,
-    onSuccess: () => form.reset('images'), // if sucessfull reset image input
+    
 })
 </script>
 

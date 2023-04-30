@@ -14,11 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         //\App\Models\TestModel::factory(2)->create();
 
-        \App\Models\User::factory(15)->create([
-            'fName' => 'aries',
-            //'email' => 'kenortz@gmail.com',
-            'phoneNumber' => '639191234567',
-        ]);
+      
 
         //\App\Models\User::factory(15)->create();
         // \App\Models\Subject::factory(1)->create([
@@ -37,6 +33,11 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'SMAW'
         // ]);
 
+        \App\Models\User::factory(1)->create([
+            'fName' => 'aries',
+            'email' => 'kenortz@gmail.com',
+            'phoneNumber' => '639191234567',
+        ]);
 
     }
 }
