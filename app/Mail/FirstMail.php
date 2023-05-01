@@ -13,12 +13,13 @@ class FirstMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $verificationUrl;
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($verificationUrl)
     {
-        //
+       $this->verificationUrl = $verificationUrl;
     }
 
     /**

@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -84,7 +84,5 @@ class User extends Authenticatable
         return $this->belongsTo(Subject::class, 'subject_id', 'id'); //fist param model , second is the foreignkey in the model table, 3rd is the local key in the user's table)
     }
 
-    public function testSubject(){
-        return $this->hasOne(TestSubject::class, 'user_id', 'id');
-    }
+    
 }

@@ -28,10 +28,10 @@ use App\Http\Controllers\UserManagementController;
 
 //mail
 
-Route::get('/send-mail', function(){
-    Mail::to('testing@example.com')->send(new FirstMail());
+// Route::get('/send-mail', function(){
+//     Mail::to('testing@example.com')->send(new FirstMail());
     
-});
+// });
 
 Route::get('/', [IndexController::class, 'index'])->name('index');
 Route::get('/show', [IndexController::class, 'show']);
@@ -46,6 +46,8 @@ Route::controller(AuthController::class)->group(function(){
 Route::controller(MailController::class)->group(function(){
     Route::get('/verify-email', 'showVerify')->name('verify.show');
     Route::get('/verify-email-sent', 'showVerificationSent')->name('verificationSent.show');
+    Route::get('/send-mail/{id}', 'sendMail')->name('mail.verify');
+    Route::get('/confirmed-email/{id}', 'confirmEmail')->name('mail.confirmed');
 });
 
 Route::controller(UserAccountController::class)->group(function(){

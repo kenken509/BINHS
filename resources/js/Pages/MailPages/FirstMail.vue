@@ -2,7 +2,7 @@
     <div class="w-screen h-screen border m-3 flex items-center justify-center">
         <div v-if="show" class="flex items-center">
             <p>Please verify your account {{ user.email }} </p>
-            <a  href="/send-mail" class="p-4 hover:text-blue-300 underline text-blue-500 " @click="handleClick">click here to send verification code</a>
+            <a  :href="route('mail.verify',{id:user.id})" class="p-4 hover:text-blue-300 underline text-blue-500 " @click="handleClick">click here to send verification code</a>
         </div>
         
         <p v-else>waiting to be verified...</p>

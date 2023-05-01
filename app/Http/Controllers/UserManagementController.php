@@ -106,6 +106,8 @@ class UserManagementController extends Controller
                 $user->image        = $storeName;
                 $user->created_by   = Auth::user()->id;
                 $user->save();
+
+                event(new Registered($user));
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
             elseif($request->role == 'student'){ //student with image
@@ -163,6 +165,8 @@ class UserManagementController extends Controller
                 $user->created_by   = Auth::user()->id;
                 $user->image        = $path;
                 $user->save();
+
+                event(new Registered($user));
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
             else{ // if role is admin
@@ -211,6 +215,8 @@ class UserManagementController extends Controller
                 $user->image        = $path;
                 $user->created_by   = Auth::user()->id;
                 $user->save();
+
+                event(new Registered($user));
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
            
@@ -253,7 +259,9 @@ class UserManagementController extends Controller
                 $user->birthDate    = $date;
                 $user->created_by   = Auth::user()->id;
                 $user->save();
-            return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
+
+                event(new Registered($user));
+                return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
             elseif($request->role == 'student'){ // student without image
                 $user = User::make($request->validate([ //  "make" function creates a new instance of the model but not stored yet
@@ -294,6 +302,8 @@ class UserManagementController extends Controller
                 $user->birthDate    = $date;
                 $user->created_by   = Auth::user()->id;
                 $user->save();
+
+                event(new Registered($user)); //event listner @Providers EventServiceProvider
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
             else{ //if admin
@@ -333,6 +343,8 @@ class UserManagementController extends Controller
                 $user->birthDate    = $date;
                 $user->created_by   = Auth::user()->id;
                 $user->save();
+
+                event(new Registered($user));
                 return redirect()->route('admin.showAllUsers')->with('success', 'Successfully Added new User!');
             }
         }
