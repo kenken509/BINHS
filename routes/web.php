@@ -12,7 +12,7 @@ use App\Http\Controllers\StrandsController;
 use App\Http\Controllers\UserAccountController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\UserManagementController;
-
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,12 +28,24 @@ use App\Http\Controllers\UserManagementController;
 Route::get('/email/verify', function(){
     return inertia('Auth/VerifyEmail');
 })->middleware('auth')->name('verification.notice');
+
+
+ 
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+ 
+    return redirect()->route('index',)->with('success', 'Email was verified');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+
 //mail
 
 // Route::get('/send-mail', function(){
 //     Mail::to('testing@example.com')->send(new FirstMail());
     
 // });
+
+//Auth::routes(['verify' => true]);
 
 Route::get('/', [IndexController::class, 'index'])->name('index');
 Route::get('/show', [IndexController::class, 'show']);
@@ -69,7 +81,7 @@ Route::controller(StrandsController::class)->middleware('auth','verified')->grou
     
 });
 
-Route::controller(UserManagementController::class)->middleware('auth','verified')->group(function(){
+Route::controller(UserManagementController::class)->middleware(['auth','verified'])->group(function(){
     Route::match(['get','post'],'/admin/panel/users-all', 'showAllUsers')->name('admin.showAllUsers');
     Route::get('/admin/panel/user-add', 'showAddUser')->name('admin.addUser');
     Route::get('/admin/panel/user-edit/{id}', 'showEditUser')->name('admin.editUser');
