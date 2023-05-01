@@ -31,17 +31,20 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
         
 
+        //************************************************* */
+        // if(!$user->email_verified_at){
+        //     // send to verify-email view
+        //     return redirect()->route('verify.show');
+        // }else{
+        //     $request->session()->regenerate(); // to avoid session fixation
 
-        if(!$user->email_verified_at){
-            // send to verify-email view
-            return redirect()->route('verify.show');
-        }else{
-            $request->session()->regenerate(); // to avoid session fixation
-
-            return redirect()->intended('/'); // redirect to intended page
-        }
-
+        //     return redirect()->intended('/'); // redirect to intended page
+        // }
+        //********************************************************* */
         
+        $request->session()->regenerate(); // to avoid session fixation
+
+        return redirect()->intended('/'); // redirect to intended page
     }
 
     public function destroy(Request $request){ // destroy the current user session (log out)

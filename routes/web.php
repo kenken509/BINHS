@@ -25,7 +25,9 @@ use App\Http\Controllers\UserManagementController;
 |
 */
 
-
+Route::get('/email/verify', function(){
+    return inertia('Auth/VerifyEmail');
+})->middleware('auth')->name('verification.notice');
 //mail
 
 // Route::get('/send-mail', function(){
@@ -59,7 +61,7 @@ Route::controller(AdminDashboardController::class)->group(function(){
     Route::get('/admin/panel', 'showAdminPanel')->name('admin.showAdminPanel');
 });
 
-Route::controller(StrandsController::class)->middleware('auth','verifyEmail')->group(function(){
+Route::controller(StrandsController::class)->middleware('auth','verified')->group(function(){
     Route::get('/strand/he', 'showHE')->name('strand.showHE');
     Route::get('/strand/ict', 'showICT')->name('strand.showICT');
     Route::get('/strand/ia', 'showIA')->name('strand.showIA');

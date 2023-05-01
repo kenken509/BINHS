@@ -11,6 +11,7 @@ use App\Models\TestSubject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserCollection;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Storage;
 
 class UserManagementController extends Controller
