@@ -1,12 +1,20 @@
 <template>
-    <div class="w-screen border m-3">
-        <p>this is my first mail</p>
-    <a href="/send-mail" class="p-4 hover:bg-indigo-200">send mail</a>
-
+    <div class="w-screen h-screen border m-3 flex items-center justify-center">
+        <div v-if="show" class="flex items-center">
+            <p>Please verify your account {{ user.email }} </p>
+            <a  href="/send-mail" class="p-4 hover:text-blue-300 underline text-blue-500 " @click="handleClick">click here to send verification code</a>
+        </div>
+        
+        <p v-else>waiting to be verified...</p>
     </div>
     
 </template>
 
 <script setup>
+import { usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
+const user = usePage().props.user
+const show = ref(true)
+const handleClick = ()=> show.value = !show.value;
 
 </script>

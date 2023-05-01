@@ -30,6 +30,7 @@ use App\Http\Controllers\UserManagementController;
 
 Route::get('/send-mail', function(){
     Mail::to('testing@example.com')->send(new FirstMail());
+    
 });
 
 Route::get('/', [IndexController::class, 'index'])->name('index');
@@ -44,6 +45,7 @@ Route::controller(AuthController::class)->group(function(){
 
 Route::controller(MailController::class)->group(function(){
     Route::get('/verify-email', 'showVerify')->name('verify.show');
+    Route::get('/verify-email-sent', 'showVerificationSent')->name('verificationSent.show');
 });
 
 Route::controller(UserAccountController::class)->group(function(){
@@ -55,7 +57,7 @@ Route::controller(AdminDashboardController::class)->group(function(){
     Route::get('/admin/panel', 'showAdminPanel')->name('admin.showAdminPanel');
 });
 
-Route::controller(StrandsController::class)->group(function(){
+Route::controller(StrandsController::class)->middleware('auth','verifyEmail')->group(function(){
     Route::get('/strand/he', 'showHE')->name('strand.showHE');
     Route::get('/strand/ict', 'showICT')->name('strand.showICT');
     Route::get('/strand/ia', 'showIA')->name('strand.showIA');
@@ -63,7 +65,7 @@ Route::controller(StrandsController::class)->group(function(){
     
 });
 
-Route::controller(UserManagementController::class)->middleware('auth')->group(function(){
+Route::controller(UserManagementController::class)->middleware('auth','verified')->group(function(){
     Route::match(['get','post'],'/admin/panel/users-all', 'showAllUsers')->name('admin.showAllUsers');
     Route::get('/admin/panel/user-add', 'showAddUser')->name('admin.addUser');
     Route::get('/admin/panel/user-edit/{id}', 'showEditUser')->name('admin.editUser');

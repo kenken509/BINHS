@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -27,9 +28,20 @@ class AuthController extends Controller
             ]);
         }
         
-        $request->session()->regenerate(); // to avoid session fixation
+        $user = User::where('email', $request->email)->first();
+        
 
-        return redirect()->intended('/'); // redirect to intended page
+
+        if(!$user->email_verified_at){
+            // send to verify-email view
+            return redirect()->route('verify.show');
+        }else{
+            $request->session()->regenerate(); // to avoid session fixation
+
+            return redirect()->intended('/'); // redirect to intended page
+        }
+
+        
     }
 
     public function destroy(Request $request){ // destroy the current user session (log out)
