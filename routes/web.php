@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 
 use App\Mail\FirstMail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -24,22 +25,33 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+//****************************************************************************** */
 Route::get('/email/verify', function(){
+   $isVerified = Auth::user()->email_verified_at;
+
+   if($isVerified){
+     return redirect()->route('index');
+   }
     return inertia('Auth/VerifyEmail');
 })->middleware('auth')->name('verification.notice');
 
 
- 
+ //verification mail handler
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
  
     return redirect()->route('index',)->with('success', 'Email was verified');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
-
+Route::post('/email/verification-notification', function (Request $request) { // import this: use Illuminate\Http\Request;
+    $request->user()->sendEmailVerificationNotification();
+ 
+    return back()->with('success', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send'); // 'throttle:attemptTime,minutes'
 //mail
 
+
+//************************************************************************** */
 // Route::get('/send-mail', function(){
 //     Mail::to('testing@example.com')->send(new FirstMail());
     

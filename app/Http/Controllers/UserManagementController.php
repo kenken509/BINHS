@@ -211,7 +211,7 @@ class UserManagementController extends Controller
                     
                 ]));
                 $user->age          = $age;
-                $user->password     = $request->lName; // hashed using accessor mutator in User model
+                $user->password     = $request->lName; // hashed using accessor mutator in User model tolowercase
                 $user->birthDate    = $date;
                 $user->image        = $path;
                 $user->created_by   = Auth::user()->id;
