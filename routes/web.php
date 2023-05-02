@@ -103,3 +103,7 @@ Route::controller(UserManagementController::class)->middleware(['auth','verified
     
 });
 
+Route::controller(QuestionsController::class)->group(function(){
+    Route::get('admin/panel/exam-management/question-all', 'questionsShow' )->name('question.all');
+});
+

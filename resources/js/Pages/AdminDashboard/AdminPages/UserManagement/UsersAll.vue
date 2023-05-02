@@ -1,5 +1,6 @@
 <template>
     <DashboardLayout :user="user">
+            <!-- flow bite tables-->
             <div class="flex flex-col ">
                 <div class="grid grid-cols-6 items-center justify-between border-bot-only border-gray-600 shadow-md py-2">
                     <div class="col-span-6 md:col-span-5">
