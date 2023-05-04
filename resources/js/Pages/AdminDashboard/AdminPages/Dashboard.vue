@@ -30,23 +30,23 @@
          <div class="flex justify-center items-center border-bot-only border-gray-600 shadow-md mb-[30px] mt-[50px]">
             <span class="text-[24px] font-bold text-gray-500">TOP 10 STUDENTS</span>  
          </div>
-      <section class="grid grid-cols-12 mt-4 space-x-2" >
+      <section class="grid grid-cols-12 mt-4 space-x-10 shadow-md" >
          <div class="flex flex-col col-span-12  lg:col-span-3">
             <div class="flex justify-center items-center font-bold">HOME ECONOMICS</div>
-            <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="overflow-x-auto sm:-mx-6 lg:-mx-8 ">
                <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
                   <div class="overflow-hidden">
-                  <table class="min-w-full text-center text-sm font-light">
+                  <table class="min-w-full text-center text-sm font-light border-gray-200">
                      <thead
-                        class="border-b bg-neutral-800 font-medium text-white dark:border-neutral-500 dark:bg-green-600">
+                        class="border-b bg-neutral-800 font-medium text-white dark:border-neutral-500 dark:bg-green-600 border ">
                         <tr>
-                        <th scope="col" class=" px-6 py-4">#</th>
+                        <th scope="col" class=" px-6 py-4 bg-gray">#</th>
                         <th scope="col" class=" px-6 py-4">First</th>
                         <th scope="col" class=" px-6 py-4">Last</th>
                         <th scope="col" class=" px-6 py-4">Grades</th>
                         </tr>
                      </thead>
-                     <tbody>
+                     <tbody class="border border-gray-200">
                         <tr class="border-b dark:border-neutral-500">
                            <td class="whitespace-nowrap  px-6 py-4 font-medium">1</td>
                            <td class="whitespace-nowrap  px-6 py-4">Mark</td>
@@ -91,7 +91,7 @@
                   <div class="overflow-hidden">
                   <table class="min-w-full text-center text-sm font-light">
                      <thead
-                        class="border-b bg-neutral-800 font-medium text-white dark:border-neutral-500 dark:bg-green-600">
+                        class="border-b bg-neutral-800 font-medium text-white dark:border-neutral-500 dark:bg-green-600 border border-gray-200">
                         <tr>
                         <th scope="col" class=" px-6 py-4">#</th>
                         <th scope="col" class=" px-6 py-4">First</th>
@@ -99,8 +99,8 @@
                         <th scope="col" class=" px-6 py-4">Grades</th>
                         </tr>
                      </thead>
-                     <tbody>
-                        <tr class="border-b dark:border-neutral-500">
+                     <tbody class="border border-gray-200">
+                        <tr class="border-b dark:border-neutral-500 ">
                            <td class="whitespace-nowrap  px-6 py-4 font-medium">1</td>
                            <td class="whitespace-nowrap  px-6 py-4">Mark</td>
                            <td class="whitespace-nowrap  px-6 py-4">Villela</td>
@@ -145,7 +145,7 @@
                   <div class="overflow-hidden">
                   <table class="min-w-full text-center text-sm font-light">
                      <thead
-                        class="border-b bg-neutral-800 font-medium text-white dark:border-neutral-500 dark:bg-green-600">
+                        class="border-b bg-neutral-800 font-medium text-white dark:border-neutral-500 dark:bg-green-600 border border-gray-200">
                         <tr>
                         <th scope="col" class=" px-6 py-4">#</th>
                         <th scope="col" class=" px-6 py-4">First</th>
@@ -153,7 +153,7 @@
                         <th scope="col" class=" px-6 py-4">Grades</th>
                         </tr>
                      </thead>
-                     <tbody>
+                     <tbody class="border border-gray-200">
                         <tr class="border-b dark:border-neutral-500">
                            <td class="whitespace-nowrap  px-6 py-4 font-medium">1</td>
                            <td class="whitespace-nowrap  px-6 py-4">Mark</td>
@@ -199,7 +199,7 @@
                   <div class="overflow-hidden">
                   <table class="min-w-full text-center text-sm font-light">
                      <thead
-                        class="border-b bg-neutral-800 font-medium text-white dark:border-neutral-500 dark:bg-green-600">
+                        class="border-b bg-neutral-800 font-medium text-white dark:border-neutral-500 dark:bg-green-600 border border-gray-200">
                         <tr>
                         <th scope="col" class=" px-6 py-4">#</th>
                         <th scope="col" class=" px-6 py-4">First</th>
@@ -207,7 +207,7 @@
                         <th scope="col" class=" px-6 py-4">Grades</th>
                         </tr>
                      </thead>
-                     <tbody>
+                     <tbody class="border border-gray-200">
                         <tr class="border-b dark:border-neutral-500">
                            <td class="whitespace-nowrap  px-6 py-4 font-medium">1</td>
                            <td class="whitespace-nowrap  px-6 py-4">Mark</td>

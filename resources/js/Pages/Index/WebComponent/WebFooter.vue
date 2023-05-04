@@ -73,7 +73,7 @@
             </div>
         </div>
         <div class="mx-6 py-10 text-center md:text-left">
-            <div class="grid-1 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+            <div class="grid-1 grid gap-8 grid-cols-1 md:grid-cols-3">
             <div class="">
                 <h6
                 class="mb-4 flex items-center justify-center font-semibold uppercase md:justify-start">
@@ -94,55 +94,30 @@
             <div class="">
                 <h6
                 class="mb-4 flex justify-center font-semibold uppercase md:justify-start">
-                Products
+                Strands
                 </h6>
                 <p class="mb-4">
                 <a href="#!" class="text-neutral-600 dark:text-neutral-200"
-                    >Angular</a
+                    >Home Economics</a
                 >
                 </p>
                 <p class="mb-4">
                 <a href="#!" class="text-neutral-600 dark:text-neutral-200"
-                    >React</a
+                    >Information and Communications Technology </a
                 >
                 </p>
                 <p class="mb-4">
                 <a href="#!" class="text-neutral-600 dark:text-neutral-200"
-                    >Vue</a
+                    >Industrial Arts</a
                 >
                 </p>
                 <p>
                 <a href="#!" class="text-neutral-600 dark:text-neutral-200"
-                    >Laravel</a
+                    >Shielding Metal Arc Welding</a
                 >
                 </p>
             </div>
-            <div class="">
-                <h6
-                class="mb-4 flex justify-center font-semibold uppercase md:justify-start">
-                Useful links
-                </h6>
-                <p class="mb-4">
-                <a href="#!" class="text-neutral-600 dark:text-neutral-200"
-                    >Pricing</a
-                >
-                </p>
-                <p class="mb-4">
-                <a href="#!" class="text-neutral-600 dark:text-neutral-200"
-                    >Settings</a
-                >
-                </p>
-                <p class="mb-4">
-                <a href="#!" class="text-neutral-600 dark:text-neutral-200"
-                    >Orders</a
-                >
-                </p>
-                <p>
-                <a href="#!" class="text-neutral-600 dark:text-neutral-200"
-                    >Help</a
-                >
-                </p>
-            </div>
+            
             <div>
                 <h6
                 class="mb-4 flex justify-center font-semibold uppercase md:justify-start">

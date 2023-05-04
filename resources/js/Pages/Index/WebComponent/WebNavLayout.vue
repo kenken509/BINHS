@@ -143,7 +143,7 @@
                                 class="nav"   
                                 :href="route('studentExamination.show')"
                                 data-te-nav-link-ref
-                                >Studen Portal</a
+                                >Student Portal</a
                             >
                             </div>
                         </li>
