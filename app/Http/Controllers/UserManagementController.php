@@ -118,7 +118,7 @@ class UserManagementController extends Controller
                 $cleanedString      = str_replace(".", "_", $email);
                 $newName            = $cleanedString.$originalName;
                 $path               = $file->storeAs('images',$newName, 'public');
-                $request->image     = $path;
+                //$request->image     = $path;
                 
                 //dd($request->image);
                 

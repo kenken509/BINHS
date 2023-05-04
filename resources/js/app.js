@@ -25,6 +25,10 @@ import RadioButton from 'primevue/radiobutton';
 import InlineMessage from 'primevue/inlinemessage';
 import Image from 'primevue/image';
 import Dialog from 'primevue/dialog';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import ColumnGroup from 'primevue/columngroup';   // optional
+import Row from 'primevue/row'; 
 
 //flowbite
 // import { 
@@ -66,6 +70,10 @@ createInertiaApp({
       .use(PrimeVue, {ripple: true})
       .use(ToastService)
       .component('Dialog',Dialog)
+      .component('Column',Column)
+      .component('ColumnGroup',ColumnGroup)
+      .component('Row',Row)
+      .component('DataTable',DataTable)
       .component('Image', Image)
       .component('InlineMessage',InlineMessage)
       .component('RadioButton', RadioButton)

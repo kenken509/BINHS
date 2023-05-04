@@ -107,3 +107,7 @@ Route::controller(QuestionsController::class)->group(function(){
     Route::get('admin/panel/exam-management/question-all', 'questionsShow' )->name('question.all');
 });
 
+Route::controller(ExaminationManagementSystem::class)->middleware(['auth', 'verified'])->group(function(){
+    Route::get('student-examination/home', 'showExamSystem')->name('studentExamination.show');
+});
+

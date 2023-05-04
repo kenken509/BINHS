@@ -8,7 +8,7 @@
                     </div>
                     <div class="col-span-6 md:col-span-1 item-center">
                         <form @submit.prevent="submit">
-                            <Dropdown  v-model="selectedRole" :options="filter" optionLabel="role" placeholder="Filter by role" class="w-full md:w-14rem " />
+                            <Dropdown  v-model="selectedRole" :options="filter" optionLabel="role" placeholder="Sort by role" class="w-full md:w-14rem " />
                         </form> 
                     </div>
                     

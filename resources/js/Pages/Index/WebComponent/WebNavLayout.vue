@@ -66,14 +66,7 @@
                             >Downloads</a
                         >
                         </li>
-                        <li class="lg:pr-2" data-te-nav-item-ref>
-                        <a
-                            class="nav"   
-                            href="#testimonials"
-                            data-te-nav-link-ref
-                            >Learn</a
-                        >
-                        </li>
+                       
                         <li class="lg:pr-2" data-te-nav-item-ref>
                         <a
                             class="nav"  href="#testimonials"
@@ -144,7 +137,16 @@
                         </ul>
                         </div>
                         
-                        
+                        <li v-if="currentUser" class="lg:pr-2" data-te-nav-item-ref >
+                            <div v-if="currentUser.role === 'student'">
+                                <a
+                                class="nav"   
+                                :href="route('studentExamination.show')"
+                                data-te-nav-link-ref
+                                >Studen Portal</a
+                            >
+                            </div>
+                        </li>
                         <!-- login modal-->
                         
                         <!-- login modal-->
