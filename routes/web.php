@@ -62,6 +62,16 @@ Route::post('/email/verification-notification', function (Request $request) { //
 Route::get('/', [IndexController::class, 'index'])->name('index');
 Route::get('/show', [IndexController::class, 'show']);
 
+// Route::controller(IndexController::class)->group(function(){
+//     Route::get('/', 'index')->name('index.home');
+//     Route::get('/about', 'showAbout')->name('index.about');
+//     Route::get('/contact', 'showContact')->name('index.contact');
+//     Route::get('/downloads', 'showDownloads')->name('index.downloads');
+//     Route::get('/news', 'showNews')->name('index.news');
+// });
+
+
+
 Route::controller(AuthController::class)->group(function(){
     Route::get('/login', 'create')->name('login');
     Route::post('/login', 'store')->name('login.store');

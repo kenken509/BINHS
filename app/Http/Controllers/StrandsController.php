@@ -7,18 +7,18 @@ use Illuminate\Http\Request;
 class StrandsController extends Controller
 {
     public function showHE(){
-        print_r('this is home economics page');
+        return inertia('Index/WebPages/Strands/HomeEconomics');
     }
 
     public function showICT(){
-        print_r('this is Information and Communications Technology (ICT) page');
+        return inertia('Index/WebPages/Strands/ICT');
     }
 
     public function showIA(){
-        print_r('this is Industrial Arts page');
+        return inertia('Index/WebPages/Strands/IndustrialArts');
     }
 
     public function showSMAW(){
-        print_r('this is home Shielded metal arc welding page');
+        return inertia('Index/WebPages/Strands/SMAW');
     }
 }

@@ -17,4 +17,20 @@ class IndexController extends Controller
             'currentUrl' => 'home'
         ]);
     }
+
+    // public function showAbout(){
+    //     return inertia('Index/WebPages/About');
+    // }
+
+    // public function showContact(){
+    //     return inertia('Index/WebPages/Contact');
+    // }
+
+    // public function showDownloads(){
+    //     return inertia('Index/WebPages/Downloads');
+    // }
+
+    // public function showNews(){
+    //     return inertia('Index/WebPages/News');
+    // }
 }

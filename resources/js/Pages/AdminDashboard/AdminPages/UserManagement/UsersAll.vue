@@ -11,7 +11,15 @@
                             <Dropdown  v-model="selectedRole" :options="filter" optionLabel="role" placeholder="Sort by role" class="w-full md:w-14rem " />
                         </form> 
                     </div>
+                    <div class="card flex justify-content-center">
+                        <InputText type="text" v-model="searchField" />
+                    </div>
+                    <div >Search field: {{ searchField }}</div>
                     
+                    <div v-for="search in exist" :key="search.id">Hanap : {{ search.fName }}</div>
+                    
+
+                  
                 </div>
                 <div v-if="$page.props.flash.success" class="flex items-center rounded-md bg-[#28a745] my-4 h-8 "><span class="p-3 text-gray-200">{{ $page.props.flash.success }}</span></div>
                 <div class="overflow-x-auto sm:-mx-6 lg:-mx-8 mt-4 overflow-x">
@@ -108,7 +116,7 @@
                             </div>
                             
                         </div>
-                        
+                       
                         <template #footer>
                             <Button label="Close" icon="pi pi-times" @click="visible = false" text />
                             <Button label="Print" icon="pi pi-check" @click="printPage" autofocus />
@@ -122,10 +130,13 @@
 <script setup>
 import DashboardLayout from '../../Layout/DashboardLayout.vue';
 import Pagination from '../../AdminComponents/Pagination.vue';
-import {ref, computed, watch } from 'vue'
+import {ref, computed, watch, onMounted } from 'vue'
 import {Link, useForm, usePage} from '@inertiajs/vue3'
 import { useToast } from 'primevue/usetoast';
 import { toUpperFirst } from '../../../Functions/Methods.vue';
+
+const searchField = ref('');
+
 
 
 
@@ -173,11 +184,36 @@ watch(selectedRole,(val) =>{
 //     toast.add({ severity: 'success',summary: 'Successfully Deleted', detail: content,  life: 3000});
 // };
 
-defineProps({
+const props = defineProps({
    users:Object,
 })
+const exist = ref([]);
+
+
+
+watch(searchField, (newSearchField )=>{
+   
+
+    const searchUser = props.users.data.map((user)=>{
+    const found = Object.keys(user).find((data) => user[data] === newSearchField);
+    
+    if(newSearchField === ''){
+        exist.value = []
+    }
+    if(found){
+        exist.value.push(user);
+    }
+});
+})
+
+
+
+
+
 
 const user = usePage().props.user;
+
+
 
 //modal toggler
 const openModal = (id)=> {
