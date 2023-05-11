@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rules\Password;
+use Illuminate\Auth\Events\Registered;
 
 
 class AuthController extends Controller
@@ -45,6 +47,37 @@ class AuthController extends Controller
         $request->session()->regenerate(); // to avoid session fixation
 
         return redirect()->intended('/'); // redirect to intended page
+    }
+
+    public function showRegistration(){
+        return inertia('Auth/Register');
+    }
+
+    public function storeGuest(Request $request){
+        
+        $rules = [
+            'password' => [
+                'required',
+                'string',
+                Password::min(8)
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised(),
+                'confirmed'
+            ]
+        ];
+
+        $user = User::make($request->validate([
+            'email' => 'required|email|unique:users',
+            'password' => $rules['password'],
+        ]));
+
+        $user->role = $request->role;
+        $user->save();
+
+        event(new Registered($user));
+        return redirect()->route('login')->with('success', 'Registered Successfully');
     }
 
     public function destroy(Request $request){ // destroy the current user session (log out)

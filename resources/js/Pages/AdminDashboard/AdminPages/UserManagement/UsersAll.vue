@@ -53,8 +53,9 @@
                                                 <i class="pi pi-eye"></i>
                                             </template>
                                         </Image>     
-                                    </td>   
-                                    <td class="whitespace-nowrap px-6 py-4">{{ toUpperFirst(user.lName)  }}, {{ toUpperFirst(user.fName) }} {{ user.mName.substring(0,1).toUpperCase() }}.</td>
+                                    </td>  
+                                    
+                                    <td class="whitespace-nowrap px-6 py-4"><span v-if="user.lName">{{ toUpperFirst(user.lName)  }}</span>, <span v-if="user.fName">{{ toUpperFirst(user.fName)  }}</span> <span v-if="user.mName">{{ user.mName.substring(0,1).toUpperCase() }}</span>.</td>
                                     <td class="whitespace-nowrap px-6 py-4">{{ user.email }}</td>
                                     <td class="whitespace-nowrap px-6 py-4">{{ user.role }}</td>
                                     <td class="whitespace-nowrap px-6 py-4">

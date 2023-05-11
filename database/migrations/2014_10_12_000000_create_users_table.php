@@ -14,26 +14,26 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('fName');
-            $table->string('mName');
-            $table->string('lName');
-            $table->enum('gender',['male','female']);
-            $table->enum('civilStatus',['single','married']);
+            $table->string('fName')->nullable();
+            $table->string('mName')->nullable();
+            $table->string('lName')->nullable();
+            $table->enum('gender',['male','female'])->nullable();
+            $table->enum('civilStatus',['single','married'])->nullable();
             $table->string('image')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('phoneNumber');
+            $table->string('phoneNumber')->nullable();
             $table->date('birthDate')->nullable();
             $table->integer('age')->nullable();
             $table->string('password')->default('$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'); //password
             $table->string('fatherName')->nullable();
             $table->string('motherName')->nullable();
             //address columns
-            $table->String('region');
-            $table->String('province');
-            $table->String('city');
-            $table->String('barangay');
-            $table->enum('role', ['admin','instructor','student' ]);
+            $table->String('region')->nullable();
+            $table->String('province')->nullable();
+            $table->String('city')->nullable();
+            $table->String('barangay')->nullable();
+            $table->enum('role', ['admin','instructor','student','guest'])->nullable();
             $table->unsignedBigInteger('subject_id')->nullable();
             $table->rememberToken();
             // accountability
