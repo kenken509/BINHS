@@ -26,6 +26,14 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 |
 */
 //****************************************************************************** */
+
+
+//API for unity
+Route::controller(ApiRequestController::class)->group(function(){
+    Route::get('/api-request/users', 'showUsers')->name('api-request.users');
+});
+
+
 Route::get('/email/verify', function(){
    $isVerified = Auth::user()->email_verified_at;
 

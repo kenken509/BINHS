@@ -247,6 +247,9 @@ const roleList = ref([
     },
     {
         'role': 'student'
+    },
+    {
+        'role': 'guest'
     }
 ])
 
